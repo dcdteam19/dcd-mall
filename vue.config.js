@@ -1,0 +1,16 @@
+module.exports={
+    devServer:{
+        before:require('./mock/index.js')
+    },
+    css:{
+        loaderOptions:{
+            less:{
+                lessOptions:{
+                    modifyVars:{
+                        'button-primary-background-color':'#FFCC32'
+                    }
+                }
+            }
+        }
+    }
+}
