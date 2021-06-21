@@ -1,10 +1,10 @@
 <template>
-    <van-button type="primary" class="my-button" @click="getUserInfo">获得数据</van-button>
+    <van-button type="primary" class="my-button" @click="getData">获得数据</van-button>
     <div id="data">{{data}}</div>
 </template>
 
 <script>
-import axios from 'axios'
+import {getUserInfo} from '../api/index'
 export default {
     data(){
         let data=''
@@ -13,12 +13,12 @@ export default {
         }
     },
     methods:{
-        getUserInfo(){
-            axios.get('/user/userinfo')
-            .then(
+        getData(){
+            // this.data=getUserInfo().data;
+            getUserInfo().then(
                 res=>{
                     // console.log(res)
-                    this.data=res.data
+                    this.data=res
                 },
                 err=>{
                     console.log(err)
