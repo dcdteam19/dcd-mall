@@ -1,7 +1,16 @@
 import axios from 'axios'
 import { get } from 'vant/lib/utils';
 //开发本地代理
-axios.defaults.baseURL = '/user' 
+if(process.env.NODE_ENV=='dev'){
+    axios.defaults.baseURL = '/user' 
+    // console.log('dev')
+}
+else{
+    axios.defaults.baseURL = '/api' 
+    // console.log(process.env.NODE_ENV)
+}
+
+
 //设置头部
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 //设置响应超时时间

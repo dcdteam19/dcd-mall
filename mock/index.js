@@ -9,7 +9,7 @@ function getJsonFile(filepath){
 }
 
 module.exports=function(app){
-    if(process.env.MOCK=='true'){
+    if(process.env.NODE_ENV=='dev'){
         //监听请求
         app.get('/user/userinfo',(req,res)=>{
             var json=getJsonFile('./userInfo.json5')
