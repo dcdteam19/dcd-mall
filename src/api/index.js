@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { get } from 'vant/lib/utils';
 //开发本地代理
 if(process.env.NODE_ENV=='dev'){
     axios.defaults.baseURL = '/user' 
     // console.log('dev')
 }
 else{
-    axios.defaults.baseURL = '/api' 
+    // axios.defaults.baseURL = '/api' 
+    axios.defaults.baseURL = 'http://127.0.0.1:3000' 
     // console.log(process.env.NODE_ENV)
 }
 
