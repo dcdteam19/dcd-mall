@@ -6,7 +6,7 @@ if(process.env.NODE_ENV=='dev'){
 }
 else{
     // axios.defaults.baseURL = '/api' 
-    axios.defaults.baseURL = 'http://127.0.0.1:3000' 
+    axios.defaults.baseURL = 'http://8.142.27.206:3000' 
     // console.log(process.env.NODE_ENV)
 }
 
@@ -14,7 +14,7 @@ else{
 //设置头部
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 //设置响应超时时间
-axios.defaults.timeout = 20000;
+axios.defaults.timeout = 200000;
 //设置接口拦截器
 axios.interceptors.request.use(
     config => {
