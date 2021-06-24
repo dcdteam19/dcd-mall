@@ -1,17 +1,25 @@
 <template>
-  <div class="home">
+  <!-- <div class="home">
     <test></test>
+  </div> -->
+  
+    
+
+  <div>
+    <v-header/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Test from './Test.vue'
-
+import vHeader from '../components/Header.vue'
 export default {
   name: 'Home',
   components: {
-    Test
+    vHeader
   }
 }
 </script>
+<style scoped>
+
+</style>
