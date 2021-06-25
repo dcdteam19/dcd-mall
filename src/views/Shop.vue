@@ -7,14 +7,15 @@
         <div class="banner">
         </div>
         <div class="category-wrapper">
-            <van-image
+            <div class="category" v-for="i in [1,2,3,4,5,6,7,8]" :key="i">
+                <van-image
                 round
                 width="44px"
                 height="44px"
-                v-for="i in [1,2,3,4]"
-                :key="i"
                 src="https://img.yzcdn.cn/vant/cat.jpeg"
-            />
+                />
+                <div class="category-name">{{i}}</div>
+            </div>
         </div>
         <v-devide/>
         <div class="discount-wrapper">
@@ -77,6 +78,19 @@ export default {
             height: 168px;
             width:100%;
             background: #FFFFFF;
+            display: flex;
+            flex-flow: row wrap;
+            align-content:flex-start;
+            .category{
+                margin-top:12px;
+                flex:0 0 25%;
+                height: 64px;
+                text-align: center;
+                .category-name{
+                    color:#333333;
+                    font-size: 12px;
+                }
+            }
         }
         .discount-wrapper{
             width:100%;
