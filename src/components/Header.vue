@@ -20,7 +20,7 @@ export default{
         background:  #FFFFFF;
         height: 44px;
         box-shadow: 0 0.5px 0 0 #E6E6E6;
-        font-family: PingFangSC-Regular;
+        font-family: PingFangSC;
         font-size: 16px;
         font-weight: 400;
         color:#333;
