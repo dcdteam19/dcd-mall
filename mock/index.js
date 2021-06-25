@@ -16,5 +16,10 @@ module.exports=function(app){
             //将生成的数据返回给浏览器
             res.json(Mock.mock(json))
         })
+        app.get('/good/discount',(req,res)=>{
+            var json=getJsonFile('./goodDiscount.json5')
+            //将生成的数据返回给浏览器
+            res.json(Mock.mock(json))
+        })
     }
 }

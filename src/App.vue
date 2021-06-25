@@ -1,5 +1,5 @@
 <template>
-  <router-view/>
+  <router-view ></router-view>
 </template>
 
 <script>
@@ -9,4 +9,5 @@ export default {
 
 <style lang="scss">
 @import "./assets/css/main.css";
+
 </style>
