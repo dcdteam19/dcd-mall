@@ -1,0 +1,5 @@
+{
+    id:"@id",
+    name:"@cname()",
+    avatar:"@image('200x200','red','#fff','avatar')",//size,background,foreground,text
+}

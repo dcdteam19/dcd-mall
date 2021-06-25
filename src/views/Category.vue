@@ -1,5 +1,6 @@
 <template>
-    
+    <div class="main"></div>
+    123
 </template>
 <script>
 export default{
@@ -7,5 +8,8 @@ export default{
 }
 </script>
 <style scoped>
-
+    .main{
+        height:2000px;
+        background: gold;
+    }
 </style>

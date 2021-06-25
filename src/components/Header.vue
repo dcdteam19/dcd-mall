@@ -1,21 +1,32 @@
 <template>
     <div id="header">
+        <v-return class="return" @click="rtrn"></v-return>
         {{title}}
     </div>
 </template>
 <script>
+import vReturn from './Return'
 export default{
     name:'Header',
+    components:{
+        vReturn
+    },
     data(){
         let title='登录'
         return{
             title
+        }
+    },
+    methods:{
+        rtrn(){
+            console.log("return")
         }
     }
 }
 </script>
 <style scoped>
     #header{
+        position: relative;
         width: 100%;
         background:  #FFFFFF;
         height: 44px;
@@ -26,5 +37,11 @@ export default{
         color:#333;
         text-align: center;
         line-height: 44px;
+    }
+    .return{
+        position:absolute;
+        margin:0;
+        top:10px;
+        left:8px;
     }
 </style>
