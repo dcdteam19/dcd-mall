@@ -5,5 +5,6 @@ import store from './store'
 import vant from 'vant'
 import 'vant/lib/index.css'
 import 'vant/lib/index.less'
+import './assets/css/font.css'
 
 createApp(App).use(vant).use(store).use(router).mount('#app')
