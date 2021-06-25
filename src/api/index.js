@@ -1,7 +1,7 @@
 import axios from 'axios'
 //开发本地代理
 if(process.env.NODE_ENV=='dev'){
-    axios.defaults.baseURL = '/user' 
+    axios.defaults.baseURL = 'https://yapi.baidu.com/mock/71812/api' 
     // console.log('dev')
 }
 else{
@@ -51,4 +51,7 @@ function Post(url, params) {
 
 export function getUserInfo(){
     return Get('/userinfo',{})
+}
+export function getCategory1(){
+    return Get('/category1/get',{})
 }

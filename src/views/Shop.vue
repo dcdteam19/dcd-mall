@@ -7,14 +7,14 @@
         <div class="banner">
         </div>
         <div class="category-wrapper">
-            <div class="category" v-for="i in [1,2,3,4,5,6,7,8]" :key="i">
+            <div class="category" v-for="i in category1" :key="i">
                 <van-image
                 round
                 width="44px"
                 height="44px"
                 src="https://img.yzcdn.cn/vant/cat.jpeg"
                 />
-                <div class="category-name">{{i}}</div>
+                <div class="category-name">{{i.category_1_name}}</div>
             </div>
         </div>
         <v-devide/>
@@ -50,6 +50,7 @@ import vHeader from '../components/Header.vue'
 import vReturn from '../components/Return.vue'
 import vDevide from '../components/Devide.vue'
 import vGood from '../components/Good.vue'
+import {getCategory1} from '../api/index'
 export default {
   name: 'Shop',
   components: {
@@ -57,6 +58,25 @@ export default {
     vReturn,
     vDevide,
     vGood
+  },
+  methods:{
+  },
+  data(){
+      const category1=[]
+      return{
+          category1
+      }
+  },
+  mounted(){
+      getCategory1().then(
+            value=>{
+                this.category1=value.category
+                console.log(this.category1)
+            },
+            reason=>{
+                console.log(reason)
+            }
+      )
   }
 }
 </script>
