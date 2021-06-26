@@ -64,7 +64,9 @@
         </div>
     </div>
     <van-sticky :offset-bottom="0" position="bottom">
-        <div class="footer"></div>
+        <div class="footer">
+            <v-sticky></v-sticky>
+        </div>
     </van-sticky>
 
 </template>
@@ -75,6 +77,7 @@ import vHeader from '../components/Header.vue'
 import vReturn from '../components/Return.vue'
 import vDevide from '../components/Devide.vue'
 import vGood from '../components/Good.vue'
+import vSticky from '../components/Sticky.vue'
 import {getCategory1,getShopGood,getShopDiscount} from '../api/index'
 
 export default {
@@ -83,9 +86,11 @@ export default {
     vHeader,
     vReturn,
     vDevide,
-    vGood
+    vGood,
+    vSticky
   },
   methods:{
+      
   },
   data(){
       const category1=[];
@@ -129,6 +134,7 @@ export default {
               console.log(reason)
           }
       )
+      
   }
 }
 </script>
