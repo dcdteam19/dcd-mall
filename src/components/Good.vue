@@ -1,22 +1,32 @@
 <template>
     <div class="good-wrapper">
-        <div class="good-box" v-for="i in [1,2,3,4,5,6,7,8]" :key="i">
+        <div class="good-box" v-for="i in good" :key="i">
             <van-image
             width="169px"
             height="169px"
             fit="fill"
-            src="https://img.yzcdn.cn/vant/cat.jpeg"
+            :src="i.good_image"
             />
-            <div class="good-name">123</div>
-            <div class="price">￥9.9</div>
-            <div class="origin-price">￥20.8</div>   
+            <div class="good-name">
+                {{i.good_name}}
+            </div>
+            <div class="price-wrapper">
+                <div class="good-price">
+                    <span class="dollar">￥</span>
+                    <span class="price">{{i.good_price}}</span>
+                </div>
+                <div class="good-origin-price">￥{{i.good_origin_price}}</div> 
+            </div>  
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    name:"Good"
+    name:"Good",
+    props:[
+        "good"
+    ]
 }
 </script>
 
@@ -33,6 +43,45 @@ export default {
             background: #F6F6F6;
             border-radius: 4px 4px 4px 4px;
             overflow: hidden;
+            .good-name{
+                overflow: hidden;
+                margin-top:10px;
+                height: 36px;
+                width: 151px;
+                margin-left: 12px;
+                font-size: 14px;
+                color:#333;
+                letter-spacing: 0;
+                font-weight: 500;
+            }
+            .price-wrapper{
+                display: flex;
+                justify-content: space-between;
+                .good-price{
+                    margin-top:6px;
+                    color: #FF9100;
+                    font-size: 16px;
+                    font-weight: 900;
+                    font-family: PingFangSC;
+                    .dollar{
+                        display: inline-block;
+                        margin-right:2px;
+                        margin-left: 8px;
+                        font-size: 12px;
+                    }
+                    .price{
+                        display: inline-block;
+                    }
+                }
+                .good-origin-price{
+                    font-size: 12px;
+                    margin-top:10px;
+                    margin-right: 10px;
+                    color:#999;
+                    text-decoration: line-through;
+                    font-weight: 600;
+                }
+            }
         }
     }
 </style>
