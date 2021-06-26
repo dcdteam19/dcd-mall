@@ -22,7 +22,7 @@
             <div class="discount-header">
                 <span class="title">限时抢购 优惠直降</span>
                 <div class="discount-time">
-                    <van-count-down :time="time">
+                    <van-count-down :time="discount.time">
                         <template #default="timeData">
                             <span class="block">{{ timeData.hours }}</span>
                             <span class="colon">:</span>
@@ -34,30 +34,32 @@
                 </div>
             </div>
             <div class="good-wrapper">
-                <div class="good" v-for="i in [1,2,3]" :key="i">
-                    <div class="good-price">
-                        <span class="dollar">￥</span>
-                        <span class="price">55.8</span>
-                    </div>
-                    <div class="good-origin-price">
-                        <span class="dollar">￥</span>
-                        <span class="price">66.8</span>
+                <div class="good" v-for="i in discount.good" :key="i">
+                    <div class="price-wrapper">
+                        <div class="good-price">
+                            <span class="dollar">￥</span>
+                            <span class="price">{{i.good_price}}</span>
+                        </div>
+                        <div class="good-origin-price">
+                            <span class="dollar">￥</span>
+                            <span class="price">{{i.good_origin_price}}</span>
+                        </div>
                     </div>
                     <van-image
                     width="82px"
                     height="82px"
-                    src="https://img.yzcdn.cn/vant/cat.jpeg"
+                    :src="i.good_image"
                     />
                 </div>
             </div>
         </div>
         <v-devide/>
-        <div class="category-good-wrapper" v-for="i in ['车载电器','车行辅助']" :key="i">
+        <div class="category-good-wrapper" v-for="i in good" :key="i">
             <div class="header">
-                <span>{{i}}</span>
+                <span>{{i.category_1_name}}</span>
             </div>
             <div class="content">
-                <v-good></v-good>
+                <v-good :good="i.good"></v-good>
             </div>
         </div>
     </div>
@@ -73,7 +75,8 @@ import vHeader from '../components/Header.vue'
 import vReturn from '../components/Return.vue'
 import vDevide from '../components/Devide.vue'
 import vGood from '../components/Good.vue'
-import {getCategory1} from '../api/index'
+import {getCategory1,getShopGood,getShopDiscount} from '../api/index'
+
 export default {
   name: 'Shop',
   components: {
@@ -86,9 +89,16 @@ export default {
   },
   data(){
       const category1=[];
+      const good=[];
+      const discount={
+          time:0,
+          good:[]
+      }
+      let time=0;
       return{
           category1,
-          time:6*60*60*5000
+          good,
+          discount
       }
   },
   mounted(){
@@ -99,6 +109,25 @@ export default {
             reason=>{
                 console.log(reason)
             }
+      )
+      getShopDiscount().then(
+          value=>{
+              console.log(value)
+              this.discount.time=value.time;
+              this.discount.good=value.good;
+          },
+          reason=>{
+              console.log(reason)
+          }
+      )
+      getShopGood().then(
+          value=>{
+              this.good=value.data;
+            //   console.log(this.good)
+          },
+          reason=>{
+              console.log(reason)
+          }
       )
   }
 }
@@ -186,26 +215,36 @@ export default {
                     height:112.3px;
                     background: #F6F6F6;
                     text-align: center;
-                    font-family: PingFangSC;
-                    .good-price{
-                        display: inline-block;
-                        margin-top:9px;
-                        margin-right: 4px;
-                        color: #FF9100;
-                        font-weight: 600;
-                        .dollar{
+                    .price-wrapper{
+                        display: flex;
+                        justify-content: space-between;
+                        .good-price{
+                            margin-top:9px;
+                            margin-left: 5px;
+                            color: #FF9100;
+                            font-weight: 600;
+                            .dollar{
+                                display: inline-block;
+                                font-size: 12px;
+                            }
+                            .price{
+                                display: inline-block;
+                                font-size: 16px;
+                            }
+                        }
+                        .good-origin-price{
+                            margin-top:11px;
+                            margin-right: 5px;
+                            color: #999;
+                            text-decoration: line-through;
                             font-size: 12px;
+                            .dollar{
+                                display: inline-block;
+                            }
+                            .price{
+                                display: inline-block;
+                            }
                         }
-                        .price{
-                            font-size: 16px;
-                        }
-                    }
-                    .good-origin-price{
-                        margin-top:9px;
-                        display: inline-block;
-                        color: #999;
-                        text-decoration: line-through;
-                        font-size: 12px;
                     }
 
                 }

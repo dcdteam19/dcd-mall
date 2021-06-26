@@ -55,3 +55,9 @@ export function getUserInfo(){
 export function getCategory1(){
     return Get('/category1/get',{})
 }
+export function getShopGood(){
+    return Get('/shop/good',{})
+}
+export function getShopDiscount(){
+    return Get('/shop/discount',{})
+}
