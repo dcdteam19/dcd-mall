@@ -1,15 +1,227 @@
 <template>
-    <div class="main"></div>
-    123
+    <div class="header">
+        <v-header :title="title"></v-header>
+    </div>
+    <div class="main">
+        <van-overlay :show="show" @click="showPopup">
+        </van-overlay>
+        <div class="category-pop">
+            <div class="tags">
+                <div class="category-item" v-show="!show">
+                    <span v-for="i in category2" :key="i" 
+                    :class="{selected:isSelected===i.category_2_id}"
+                    @click="changeCategory(i.category_2_id)">
+                    {{i.category_2_name}}
+                    </span>
+                </div>
+                <span class="category-all" v-show="show">
+                    全部分类
+                </span>
+            </div>
+            <div class="gradient"></div>
+            <div class="arrow">
+                <img :src="arrow_up" alt="" @click="showPopup" v-show="!show">
+                <img :src="arrow_down" alt="" @click="showPopup" v-show="show">
+            </div>
+            <div class="pop" v-show="show">
+                <div class="tags"
+                v-for="i in category2" :key="i"
+                :class="{selected:isSelected===i.category_2_id}"
+                @click="changeCategory(i.category_2_id)">
+                {{i.category_2_name}}
+                </div>
+            </div>
+        </div>
+        <div class="good">
+            <v-good :good="good"></v-good>
+        </div>
+    </div>
+    <van-sticky :offset-bottom="0" position="bottom">
+        <div class="footer">
+            <v-sticky></v-sticky>
+        </div>
+    </van-sticky>
+
 </template>
 <script>
+import vHeader from '../components/Header.vue'
+import vSticky from '../components/Sticky.vue'
+import vGood from '../components/Good.vue'
+import {getCategory2Good,getCategory2} from '../api/index'
+
 export default{
-    name:'Category'
+    name:'Category',
+    components:{
+        vHeader,
+        vSticky,
+        vGood
+    },
+    data(){
+        let title="车载电器";
+        let arrow_up=require('../assets/image/arrow_up@2x.png');
+        let arrow_down=require('../assets/image/arrow_down@2x.png');
+        let show =false;
+        const good=[];
+        const category2=[];
+        let isSelected='';
+        return {
+            title,
+            arrow_up,
+            arrow_down,
+            show,
+            good,
+            category2,
+            isSelected
+        }
+    },
+    methods:{
+        showPopup(){
+            this.show=!this.show;
+        },
+        changeCategory(Category_2_id){
+            console.log(Category_2_id)
+            this.isSelected=Category_2_id
+        }
+    },
+    mounted(){
+        getCategory2Good().then(
+            value=>{
+                // console.log(value)
+                this.good=value.good;
+            }
+        )
+        getCategory2().then(
+            value=>{
+                this.category2=value.category_2;
+                this.isSelected=this.category2[0].category_2_id;
+                // console.log(value)
+            }
+        )
+    }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+    /*定义滚动条高宽及背景
+    高宽分别对应横竖滚动条的尺寸*/
+    ::-webkit-scrollbar
+    {
+        width:0;
+        height:0;
+    }
     .main{
         height:2000px;
-        background: gold;
+        .cover{
+            position:absolute;
+            top:84px;
+            height: 100vh;
+            width:100%;
+            background:rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+        .category-pop{
+            display: flex;
+            position: relative;
+            width: 100%;
+            background:  #FFFFFF;
+            height: 40px;
+            box-shadow: 0 0.5px 0 0 #E6E6E6;
+            font-family: PingFangSC;
+            font-size: 16px;
+            font-weight: 400;
+            color:#333;
+            text-align: center;
+            line-height: 44px;
+            z-index:100;
+            .tags{
+                width:90%;
+                overflow-x: scroll;
+                text-align: left;
+                .category-item{
+                    margin-left:15px;
+                    //子元素宽度总和撑开父元素
+                    display: inline-block;
+                    white-space: nowrap;
+                    span{
+                        display: inline-block;
+                        margin-right: 24px;
+                        font-size: 14px;
+                        color: #999999;
+                        letter-spacing: 0;
+                        line-height: 14px;
+                    }
+                    .selected{
+                        font-size: 14px;
+                        color: #333333;
+                        letter-spacing: 0;
+                        line-height: 14px;
+                        font-weight: 600;
+                    }
+                }
+                .category-all{
+                    margin-left:15px;
+                    font-size: 14px;
+                    color: #333333;
+                    letter-spacing: 0;
+                    line-height: 14px;
+                    font-weight: 900;
+                }
+            }
+            .gradient{
+                position: absolute;
+                background-image: linear-gradient(90deg, rgba(255,255,255,0.00) 0%, #FFFFFF 69%);
+                width:21px;
+                height:100%;
+                right: 36px;
+            }
+            .arrow{
+                position: absolute;
+                right:0;
+                width:40px;
+                img{
+                    width: 30%;
+                    height: 30%;
+                }
+            }
+            .pop{
+                position:absolute;
+                top:39px;
+                width: 100%;
+                height:fit-content;
+                background: #fff;
+                display: flex;
+                flex-wrap:wrap;
+                justify-content: center;
+                padding-bottom: 24px;
+                .tags{
+                    height: 24px;
+                    color: #999;
+                    font-size: 12px;
+                    line-height: 24px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    border: #ccc 1px solid;
+                    border-radius: 14px;
+                    margin-top:12px;
+                    margin-right: 6px;
+                    margin-left: 6px;
+                    width: fit-content;
+                }
+                .selected{
+                        font-size: 12px;
+                        color: #333333;
+                        border: #333 1px solid;
+                        font-weight: 600;
+                    }
+            }
+        }
+        .good{
+            margin-top:12px
+        }
+    }
+
+    .footer{
+        width: 100%;
+        height: 48px;
+        background: #FFFFFF;
     }
 </style>

@@ -61,3 +61,11 @@ export function getShopGood(){
 export function getShopDiscount(){
     return Get('/shop/discount',{})
 }
+
+
+export function getCategory2Good(){
+    return Get('/category2/good',{})
+}
+export function getCategory2(){
+    return Get('/category2',{})
+}
