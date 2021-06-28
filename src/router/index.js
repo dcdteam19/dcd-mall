@@ -3,6 +3,7 @@ import shop from '../views/Shop.vue'
 import login from '../views/Login.vue'
 import category from '../views/Category.vue'
 import good from '../views/Good.vue'
+import user from '../views/User.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/good',
     name: 'good',
     component: good
+  },
+  {
+    path:'/user',
+    name:'user',
+    component:user
   }
 ]
 
