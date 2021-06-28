@@ -24,12 +24,13 @@
                 <img :src="arrow_down" alt="" @click="showPopup" v-show="show">
             </div>
             <div class="pop" v-show="show">
-                <div class="tags"
+                <v-tag
                 v-for="i in category2" :key="i"
-                :class="{selected:isSelected===i.category_2_id}"
-                @click="changeCategory(i.category_2_id)">
-                {{i.category_2_name}}
-                </div>
+                @click="changeCategory(i.category_2_id)"
+                :name="i.category_2_name"
+                :id="i.category_2_id"
+                :isSelected="isSelected">
+                </v-tag>
             </div>
         </div>
         <div class="good">
@@ -47,6 +48,7 @@
 import vHeader from '../components/Header.vue'
 import vSticky from '../components/Sticky.vue'
 import vGood from '../components/Good.vue'
+import vTag from '../components/Tag.vue'
 import {getCategory2Good,getCategory2} from '../api/index'
 
 export default{
@@ -54,7 +56,8 @@ export default{
     components:{
         vHeader,
         vSticky,
-        vGood
+        vGood,
+        vTag
     },
     data(){
         let title="车载电器";
@@ -188,30 +191,11 @@ export default{
                 width: 100%;
                 height:fit-content;
                 background: #fff;
-                display: flex;
-                flex-wrap:wrap;
-                justify-content: center;
+                // display: flex;
+                // flex-wrap:wrap;
+                // justify-content: center;
                 padding-bottom: 24px;
-                .tags{
-                    height: 24px;
-                    color: #999;
-                    font-size: 12px;
-                    line-height: 24px;
-                    padding-left: 8px;
-                    padding-right: 8px;
-                    border: #ccc 1px solid;
-                    border-radius: 14px;
-                    margin-top:12px;
-                    margin-right: 6px;
-                    margin-left: 6px;
-                    width: fit-content;
-                }
-                .selected{
-                        font-size: 12px;
-                        color: #333333;
-                        border: #333 1px solid;
-                        font-weight: 600;
-                    }
+                
             }
         }
         .good{
@@ -220,8 +204,8 @@ export default{
     }
 
     .footer{
-        width: 100%;
-        height: 48px;
+        width: 100%;        
+        height: fit-content;
         background: #FFFFFF;
     }
 </style>

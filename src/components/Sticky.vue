@@ -30,11 +30,13 @@ export default {
     .sticky-wrapper{
         display: flex;
         justify-content: center;
+        height: 82px;
         .shop{
             height: 32px;
             width: 32px;
             position: relative;
             margin-right: 118px;
+            margin-top: 5px;
             img{
                 height:100%;
                 width:100%;
@@ -50,6 +52,7 @@ export default {
             }
         }
         .user{
+            margin-top: 5px;
             height: 32px;
             width: 32px;
             position: relative;

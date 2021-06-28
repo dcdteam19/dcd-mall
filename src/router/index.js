@@ -2,12 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import shop from '../views/Shop.vue'
 import login from '../views/Login.vue'
 import category from '../views/Category.vue'
-import header from '../components/Header'
+import good from '../views/Good.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'Shop',
+    name: 'shop',
     component: shop
   },
   {
@@ -21,9 +21,9 @@ const routes = [
     component: category
   },
   {
-    path: '/header',
-    name: 'header',
-    component: header
+    path: '/good',
+    name: 'good',
+    component: good
   }
 ]
 

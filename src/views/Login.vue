@@ -72,7 +72,6 @@ export default{
 }
 </script>
 <style lang="scss" scoped>
-
     input::-webkit-input-placeholder {
         color:#999;
     }
@@ -99,6 +98,9 @@ export default{
                 line-height: 48.24px;
                 width: 311px;
                 border-bottom: solid 1px #E6E6E6;
+                .iconfont{
+                    color:#333;
+                }
                 .form-item-name{
                     display: inline-block;
                     font-size: 16px;
@@ -145,7 +147,7 @@ export default{
 
     .footer{
         width: 100%;
-        height: 48px;
+        height: fit-content;
         background: #FFFFFF;
         position:absolute;
         bottom:0;
