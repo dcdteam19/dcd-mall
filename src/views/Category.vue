@@ -1,40 +1,44 @@
 <template>
-    <div class="header">
-        <v-header :title="title"></v-header>
-    </div>
-    <div class="main">
-        <van-overlay :show="show" @click="showPopup">
-        </van-overlay>
-        <div class="category-pop">
-            <div class="tags">
-                <div class="category-item" v-show="!show">
-                    <span v-for="i in category2" :key="i" 
-                    :class="{selected:isSelected===i.category_2_id}"
-                    @click="changeCategory(i.category_2_id)">
-                    {{i.category_2_name}}
+    <van-sticky :offset-top="0">
+        <div class="header">
+            <v-header :title="title"></v-header>
+            <div class="category-pop">
+                <div class="tags">
+                    <div class="category-item" v-show="!show">
+                        <span v-for="i in category2" :key="i" 
+                        :class="{selected:isSelected===i.category_2_id}"
+                        @click="changeCategory(i.category_2_id)">
+                        {{i.category_2_name}}
+                        </span>
+                    </div>
+                    <span class="category-all" v-show="show">
+                        全部分类
                     </span>
                 </div>
-                <span class="category-all" v-show="show">
-                    全部分类
-                </span>
-            </div>
-            <div class="gradient"></div>
-            <div class="arrow">
-                <img :src="arrow_up" alt="" @click="showPopup" v-show="!show">
-                <img :src="arrow_down" alt="" @click="showPopup" v-show="show">
-            </div>
-            <div class="pop" v-show="show">
-                <v-tag
-                v-for="i in category2" :key="i"
-                @click="changeCategory(i.category_2_id)"
-                :name="i.category_2_name"
-                :id="i.category_2_id"
-                :isSelected="isSelected">
-                </v-tag>
+                <div class="gradient"></div>
+                <div class="arrow">
+                    <img :src="arrow_up" alt="" @click="showPopup" v-show="!show">
+                    <img :src="arrow_down" alt="" @click="showPopup" v-show="show">
+                </div>
+                <div class="pop" v-show="show">
+                    <v-tag
+                    v-for="i in category2" :key="i"
+                    @click="changeCategory(i.category_2_id)"
+                    :name="i.category_2_name"
+                    :id="i.category_2_id"
+                    :isSelected="isSelected">
+                    </v-tag>
+                </div>
             </div>
         </div>
-        <div class="good">
-            <v-good :good="good"></v-good>
+    </van-sticky>
+    <div class="body">
+        <van-overlay :show="show" @click="showPopup">
+        </van-overlay>
+        <div class="good-wrapper">
+            <div class="good">
+                <v-good :good="good" v-for="i in [1,1]" :key="i"></v-good>
+            </div>
         </div>
     </div>
     <van-sticky :offset-bottom="0" position="bottom">
@@ -111,8 +115,11 @@ export default{
         width:0;
         height:0;
     }
-    .main{
-        height:2000px;
+    .header{
+        position: absolute;
+        width:100%;
+        top:0;
+        background: #fff;
         .cover{
             position:absolute;
             top:84px;
@@ -198,8 +205,15 @@ export default{
                 
             }
         }
-        .good{
-            margin-top:12px
+    }
+    .body{
+        min-height: 100vh;
+        .good-wrapper{
+            padding-top:44px;
+            height: fit-content;
+            .good{
+                margin-top:12px
+            }
         }
     }
 

@@ -24,13 +24,13 @@
         <v-devide></v-devide>
         <div class="user-address-order-wrapper">
             <div class="address-wrapper">
-                <img src="" alt="" class="icon">
-
+                <img :src="address" alt="" class="icon">
+                <span>我的地址</span>
                 <img :src="arrow" alt=">" class="arrow">
             </div>
             <div class="order-wrapper">
-                <img src="" alt="" class="icon">
-
+                <img :src="order" alt="" class="icon">
+                <span>我的订单</span>
                 <img :src="arrow" alt=">" class="arrow">
             </div>
         </div>
@@ -57,9 +57,13 @@ export default{
     data(){
         const title="我的";
         const arrow=require('../assets/image/more_ic@2x.png');
+        const address=require('../assets/image/address.png');
+        const order=require('../assets/image/order.png')
         return {
             title,
-            arrow
+            arrow,
+            address,
+            order
         }
     }
 }
@@ -111,7 +115,31 @@ export default{
             .address-wrapper,.order-wrapper{
                 height: 55.5px;
                 border-bottom: 0.5px solid #E6E8F2;
-
+                position:relative;
+                .icon{
+                    position: absolute;
+                    height: 24px;
+                    width: 24px;
+                    left:13px;
+                    top:16px;
+                }
+                span{
+                    position: absolute;
+                    top:17px;
+                    left:47px;
+                    font-size: 16px;
+                    color: #1F2129;
+                    letter-spacing: 0;
+                    line-height: 22px;
+                    font-weight: 400;
+                }
+                .arrow{
+                    height:12px;
+                    width:12px;
+                    position: absolute;
+                    right:20px;
+                    top:22px;
+                }
             }
         }
         .changeAcount{

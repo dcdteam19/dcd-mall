@@ -4,6 +4,7 @@ import login from '../views/Login.vue'
 import category from '../views/Category.vue'
 import good from '../views/Good.vue'
 import user from '../views/User.vue'
+import userorder from '../views/UserOrder.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path:'/user',
     name:'user',
     component:user
+  },
+  {
+    path:'/user/order',
+    name:'user/order',
+    component:userorder
   }
 ]
 
