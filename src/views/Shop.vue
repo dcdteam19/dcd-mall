@@ -290,7 +290,7 @@ export default {
 
     .footer{
         width: 100%;
-        height: 48px;
+        height: fit-content;
         background: #FFFFFF;
     }
 </style>

@@ -3,3 +3,30 @@
     src: 
         url('../font/PingFangSC.ttf') format('PingFangSC');
 }
+@font-face {
+  font-family: "iconfont"; /* Project id  */
+  src: url('../font/iconfont.ttf?t=1624879135817') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-bianji:before {
+  content: "\e607";
+}
+
+.icon-dingwei:before {
+  content: "\e632";
+}
+
+.icon-cha1:before {
+  content: "\e633";
+}
+
+
+  

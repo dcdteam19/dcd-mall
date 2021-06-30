@@ -11,12 +11,9 @@ export default{
     components:{
         vReturn
     },
-    data(){
-        let title='登录'
-        return{
-            title
-        }
-    },
+    props:[
+        "title"
+    ],
     methods:{
         rtrn(){
             console.log("return")
@@ -30,13 +27,14 @@ export default{
         width: 100%;
         background:  #FFFFFF;
         height: 44px;
-        box-shadow: 0 0.5px 0 0 #E6E6E6;
+        /* box-shadow: 0 0.5px 0 0 #E6E6E6; */
         font-family: PingFangSC;
         font-size: 16px;
         font-weight: 400;
         color:#333;
         text-align: center;
         line-height: 44px;
+        z-index: 99;
     }
     .return{
         position:absolute;
