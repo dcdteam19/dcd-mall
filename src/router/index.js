@@ -7,6 +7,7 @@ import user from '../views/User.vue'
 import userorder from '../views/UserOrder.vue'
 import userorderinfo from '../views/Order.vue'
 import useraddress from '../views/UserAddress.vue'
+import useraddressedit from '../views/UserAddressEdit'
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path:'/user/address',
     name:'useraddress',
     component:useraddress
+  },
+  {
+    path:'/user/address/edit',
+    name:'useraddressedit',
+    component:useraddressedit
   }
 ]
 

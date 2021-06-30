@@ -17,7 +17,10 @@ module.exports={
             less:{
                 lessOptions:{
                     modifyVars:{
-                        'button-primary-background-color':'#FFCC32'
+                        'button-primary-background-color':'#FFCC32',
+                        'primary-color':'#FFCC32',
+                        'address-edit-detail-finish-color':'#FFCC32'
+                        
                     }
                 }
             }
