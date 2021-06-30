@@ -5,6 +5,8 @@ import category from '../views/Category.vue'
 import good from '../views/Good.vue'
 import user from '../views/User.vue'
 import userorder from '../views/UserOrder.vue'
+import userorderinfo from '../views/Order.vue'
+import useraddress from '../views/UserAddress.vue'
 
 const routes = [
   {
@@ -34,8 +36,18 @@ const routes = [
   },
   {
     path:'/user/order',
-    name:'user/order',
+    name:'userorder',
     component:userorder
+  },
+  {
+    path:'/user/order/info',
+    name:'userorderinfo',
+    component:userorderinfo
+  },
+  {
+    path:'/user/address',
+    name:'useraddress',
+    component:useraddress
   }
 ]
 
