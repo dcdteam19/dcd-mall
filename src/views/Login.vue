@@ -9,26 +9,22 @@
         <div class="form">
             <div class="form-item">
                 <div class="form-item-name">用户名</div>
-                <input type="text" class="username" placeholder="请输入您的用户名" v-model="username">
+                <input type="text" class="username" placeholder="请输入您的用户名" :class="{empty:usernameEmpty}" v-model="userinfo.username">
                 <span class="iconfont" @click="clear" v-show="show">&#xe633;</span>
             </div>
             <div class="form-item">
                 <div class="form-item-name">密码</div>
-                <input type="password" placeholder="请输入您的密码">
+                <input type="password" placeholder="请输入您的密码" v-model="userinfo.password" :class="{empty:passwordEmpty}"> 
             </div>
             <div class="button">
-                <van-button type="primary" class="my-button" @click="confirm">确认</van-button>
+                <van-button type="primary" class="my-button" @click="onSubmit">确认</van-button>
             </div>
             <div class="tip">
                 未注册用户会自动注册并登录
             </div>
         </div>
     </div>
-    <!-- <van-sticky :offset-bottom="0" position="bottom">
-        <div class="footer">
-            <v-sticky></v-sticky>
-        </div>
-    </van-sticky> -->
+
 </template>
 <script>
 import vHeader from '../components/Header.vue'
@@ -37,23 +33,42 @@ import vSticky from '../components/Sticky.vue'
 export default{
     name:'Login',
     watch:{
-        username(newValue,oldValue){
-            if(newValue!==''){
-                this.show=true;
+        'userinfo.username':{
+            deep:true,
+            handler(newValue,oldValue){
+                if(newValue!==''){
+                    this.show=true;
+                    this.usernameEmpty=false;
+                }
+                else{
+                    this.show=false;
+                }
             }
-            else{
-                this.show=false;
+        },
+        'userinfo.password':{
+            deep:true,
+            handler(newValue,oldValue){
+                if(newValue!==''){
+                    this.passwordEmpty=false;
+                }
             }
         }
     },
     data(){
         const title="登录";
         let show=false;
-        let username='';
+        let usernameEmpty=false;
+        let passwordEmpty=false;
+        const userinfo={
+            username:'',
+            password:''
+        }
         return{
             title,
             show,
-            username
+            userinfo,
+            usernameEmpty,
+            passwordEmpty
         }
     },
     components:{
@@ -63,10 +78,18 @@ export default{
     methods:{
         clear(){
             this.show=!this.show;
-            this.username='';
+            this.userinfo.username='';
         },
-        confirm(){
-
+        onSubmit(){
+            if(this.userinfo.username=='' ){
+                this.usernameEmpty=true;
+            }
+            if(this.userinfo.password=='' ){
+                this.passwordEmpty=true;
+            }
+            if(this.userinfo.username!='' && this.userinfo.password!=''){
+                console.log(this.userinfo)
+            }
         }
     }
 }
@@ -114,6 +137,9 @@ export default{
                     color:#333;
                     border: 0;
                     width:240px;
+                }
+                .empty::-webkit-input-placeholder{
+                    color:red;
                 }
                 .username{
                     height: 47px;

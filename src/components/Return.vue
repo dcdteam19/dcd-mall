@@ -1,15 +1,22 @@
 <template>
-    <img :src="arr" alt="<">
+    <img :src="arr" alt="<" @click="goBack">
 </template>
 
 <script>
-
+import {useRouter} from 'vue-router'
 export default {
     name:"return",
     data(){
         let arr=require("../assets/image/icon_ Return.png")
+        const router=useRouter();
         return{
-            arr
+            arr,
+            router
+        }
+    },
+    methods:{
+        goBack(){
+            this.router.go(-1)
         }
     }
 }

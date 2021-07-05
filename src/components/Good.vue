@@ -1,22 +1,26 @@
 <template>
     <div class="good-wrapper">
         <div class="good-box" v-for="i in good" :key="i">
-            <van-image
-            width="169px"
-            height="169px"
-            fit="fill"
-            :src="i.good_image"
-            />
-            <div class="good-name">
-                {{i.good_name}}
-            </div>
-            <div class="price-wrapper">
-                <div class="good-price">
-                    <span class="dollar">￥</span>
-                    <span class="price">{{i.good_price}}</span>
+            <router-link :to="'/good?gid='+i.good_id">
+                <div>
+                    <van-image
+                    width="169px"
+                    height="169px"
+                    fit="fill"
+                    :src="i.good_image"
+                    />
+                    <div class="good-name">
+                        {{i.good_name}}
+                    </div>
+                    <div class="price-wrapper">
+                        <div class="good-price">
+                            <span class="dollar">￥</span>
+                            <span class="price">{{i.good_price}}</span>
+                        </div>
+                        <div class="good-origin-price">￥{{i.good_origin_price}}</div> 
+                    </div>  
                 </div>
-                <div class="good-origin-price">￥{{i.good_origin_price}}</div> 
-            </div>  
+            </router-link>
         </div>
     </div>
 </template>

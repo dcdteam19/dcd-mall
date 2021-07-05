@@ -25,7 +25,7 @@
     
     <div class="body">
         <div class="page-wrapper">
-            <v-order-box v-for="i in [1,1]" :key="i" ></v-order-box>
+            <v-order-box v-for="i in [1,1]" :key="i"></v-order-box>
         </div>
     </div>
     <div class="footer">

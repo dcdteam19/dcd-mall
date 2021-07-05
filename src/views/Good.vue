@@ -6,7 +6,7 @@
         <van-overlay :show="buy||address" @click="buy = false;address=false" />
         <div class="banner">
             <van-swipe :autoplay="3000" style="height: 225px;" indicator-color="white" lazy-render>
-                <van-swipe-item v-for="image in banner" :key="image">
+                <van-swipe-item v-for="image in good_data.good_image" :key="image">
                     <van-image
                     width="100%"
                     height="225px"
@@ -21,7 +21,7 @@
                         ￥
                     </span>
                     <span class="price">
-                        299.9
+                        {{good_data.good_price}}
                     </span>
                 </div>
                 <div class="good-origin-price">
@@ -29,7 +29,7 @@
                         ￥
                     </span>
                     <span class="price">
-                        320.9
+                        {{good_data.good_origin_price}}
                     </span>
                 </div>
             </div>
@@ -37,22 +37,22 @@
         <div class="good-brief-info">
             <div class="header">
                 <div class="good-name">
-                    360行车记录仪 G300 迷你隐藏 高清夜视 无限车速 黑灰色
+                    {{good_data.good_name}}
                 </div>
                 <div class="line"></div>
                 <div class="collection">
-                    <img :src="collection[0]" alt="" class="star" v-show="!collected" @click="collected=!collected">
-                    <img :src="collection[1]" alt="" class="star" v-show="collected" @click="collected=!collected">
+                    <img :src="collection[0]" alt="" class="star" v-show="!good_data.if_collect" @click="changeCollect">
+                    <img :src="collection[1]" alt="" class="star" v-show="good_data.if_collect" @click="changeCollect">
                 </div>
             </div>
             <div class="brief-description">
-                6月10日秒杀价308元，报价618，买贵退差价！360行车记录仪，超300万车主的选择
+                {{good_data.good_description}}
             </div>
         </div>
         <v-devide/>
         <div class="type-address-wrapper">
-            <v-select-bar :name="selectType.name" :value="selectType.value" @click="buy=true"></v-select-bar>
-            <v-select-bar :name="selectAddress.name" :value="selectAddress.value" @click="address=true"></v-select-bar>
+            <v-select-bar :name="'已选'" :value="order.type.description+'*'+order.number" @click="buy=true"></v-select-bar>
+            <v-select-bar :name="'送至'" :value="''" @click="address=true"></v-select-bar>
         </div>
         <v-devide/>
         <div class="info-service-bar">
@@ -89,7 +89,7 @@
                             ￥
                         </span>
                         <span class="price">
-                            299.9
+                            {{order.type.type_price}}
                         </span>
                     </div>
                     <div class="good-origin-price">
@@ -97,26 +97,30 @@
                             ￥
                         </span>
                         <span class="price">
-                            320.9
+                            {{order.type.type_origin_price}}
                         </span>
                     </div>
                 </div>
             </div>
             <div class="body">
                 <div class="content">
-                    <v-tag :id="1" :name="name" :isSelected="1"></v-tag>
+                    <v-tag 
+                    v-for="type in good_data.type" :key="type"
+                    :name="type.description" :isSelected="order.type.description"
+                    @click="order.type=type">
+                    </v-tag>
                 </div>
             </div>
             <div class="footer">
                 <div class="number-wrapper">
                     <span>数量</span>
                     <div class="number">
-                        <div class="sub" @click="number>0?number=number-1:number=number"></div>
-                        <div class="num">{{number}}</div>
-                        <div class="add" @click="number<100?number=number+1:number=number"></div>
+                        <div class="sub" @click="order.number>0?order.number=order.number-1:order.number=order.number"></div>
+                        <div class="num">{{order.number}}</div>
+                        <div class="add" @click="order.number<100?order.number=order.number+1:order.number=order.number"></div>
                     </div>
                 </div>
-                <div class="button">
+                <div class="button" @click="goOrder">
                     <van-button type="primary" class="pop-button">立即购买</van-button>
                 </div>
             </div>
@@ -130,7 +134,7 @@
             </div>
             <div class="body">
                 <div class="address-wrapper">
-                    <div class="address-row" v-for="i of [1,2,3,4,5,6,7,8]" :key="i" :class="{selected:selectAddress.value=='重庆市江北区'}">
+                    <div class="address-row" v-for="i of [1,2,3,4,5,6,7,8]" :key="i" :class="{selected:true}">
                         <div class="iconfont">&#xe632;</div>
                         <div class="address">
                             北京市海淀区花园东路19号中兴大厦7层东侧501室
@@ -139,7 +143,7 @@
                 </div>
             </div>
             <div class="footer">
-                <div class="button">
+                <div class="button" >
                     <van-button type="primary" class="pop-button">添加新地址</van-button>
                 </div>
             </div>
@@ -160,9 +164,19 @@ import vDevide from '../components/Devide.vue'
 import vTag from '../components/Tag.vue'
 import vSelectBar from '../components/SelectBar.vue'
 import vCross from '../components/Cross.vue'
+import {goodInfoGet} from '../api'
 
 export default{
     name:'Good',
+    methods:{
+        changeCollect(){
+            this.good_data.if_collect=!this.good_data.if_collect;
+            console.log(this.good_data.if_collect)
+        },
+        goOrder(){
+            this.$router.push({path:'/user/order/info'})
+        }
+    },
     components:{
         vHeader,
         vDevide,
@@ -171,43 +185,69 @@ export default{
         vCross
     },
     data(){
+        const router='';
         const title="商品详情"
         const banner=[
             'https://img.yzcdn.cn/vant/apple-1.jpg',
-            'https://img.yzcdn.cn/vant/apple-2.jpg',
-            ''
+            'https://img.yzcdn.cn/vant/apple-2.jpg'
         ];
         const collection=[];
         collection.push(require('../assets/image/star-not.png'));
         collection.push(require('../assets/image/star-col.png'));
-        let collected=false;
         let info_service=true;
         let address=false;
         let buy=false;
         let name="black";
-        let number=1;
-        const selectType={
-                name: "已选",
-                value: "深灰 * 1"
-            };
-        const selectAddress={
-                name:"送至",
-                value:"重庆市江北区"
-            }
+
+        const good_data={
+            good_name:'',
+            good_image:[],
+            good_description:'',
+            good_detail:'',
+            good_price:'',
+            good_origin_price:'',
+            if_collect:false,
+            type:[
+                {
+                    type_description:'',
+                    type_price:'',
+                    type_origin_price:'',
+                    type_image:''
+                }
+            ],
+        }
+
+        const order={
+            type:{
+                description:'',
+                type_price:0,
+                type_origin_price:0
+            },
+            number:1
+        }
         
         return {
             title,
             banner,
             collection,
-            collected,
             info_service,
             address,
             buy,
             name,
-            number,
-            selectType,
-            selectAddress,
+
+            good_data,
+            order
         }
+    },
+    mounted(){
+        // console.log(this.$route.query)
+        goodInfoGet(this.$route.query.good_id,this.$route.query.user_id).then(
+            res=>{
+                this.good_data=res
+                this.order.type.description=this.good_data.type[0].description
+                console.log(this.good_data)
+            }
+        )
     }
 }
 </script>

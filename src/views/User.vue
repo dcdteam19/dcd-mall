@@ -23,19 +23,25 @@
         </div>
         <v-devide></v-devide>
         <div class="user-address-order-wrapper">
-            <div class="address-wrapper">
-                <img :src="address" alt="" class="icon">
-                <span>我的地址</span>
-                <img :src="arrow" alt=">" class="arrow">
-            </div>
-            <div class="order-wrapper">
-                <img :src="order" alt="" class="icon">
-                <span>我的订单</span>
-                <img :src="arrow" alt=">" class="arrow">
-            </div>
+            <router-link to="/user/address">
+                <div class="address-wrapper">
+                    <img :src="address" alt="" class="icon">
+                    <span>我的地址</span>
+                    <img :src="arrow" alt=">" class="arrow">
+                </div>
+            </router-link>
+            <router-link to="/user/order">
+                <div class="order-wrapper">
+                    <img :src="order" alt="" class="icon">
+                    <span>我的订单</span>
+                    <img :src="arrow" alt=">" class="arrow">
+                </div>
+            </router-link>
         </div>
         <v-devide></v-devide>
-        <div class="changeAcount">切换账号</div>
+        <router-link to="/login">
+            <div class="changeAcount">切换账号</div>
+        </router-link>
     </div>
     <van-sticky :offset-bottom="0" position="bottom">
         <div class="footer">
@@ -65,6 +71,9 @@ export default{
             address,
             order
         }
+    },
+    mounted(){
+        console.log(this.$route.params.uid)
     }
 }
 </script>

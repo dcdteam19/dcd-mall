@@ -1,55 +1,53 @@
 <template>
-    <div class="wrapper">
-        <div class="header">
-            <div class="shop-name">车品商城</div>
-            <div class="state">待付款</div>
-        </div>
-        <div class="body">
-            <div class="order-image">
-                <van-image
-                width="95px"
-                height="95px"
-                fit="fill"
-                src=""
-                />
+    <router-link to="/user/order/info">
+        <div class="wrapper">
+            <div class="header">
+                <div class="shop-name">车品商城</div>
+                <div class="state">待付款</div>
             </div>
-            <div class="order-info-wrapper">
-                <div class="order-info">
-                    <div class="good-name">
-                        360行车记录仪 G300 迷你隐藏 高清夜视 无限车速 黑灰色
-                    </div>
-                    <div class="good-type">
-                        深空灰
-                    </div>
-                    <div class="good-number-price">
-                        <div class="good-number">
-                            x1
+            <div class="body">
+                <div class="order-image">
+                    <van-image
+                    width="95px"
+                    height="95px"
+                    fit="fill"
+                    src=""
+                    />
+                </div>
+                <div class="order-info-wrapper">
+                    <div class="order-info">
+                        <div class="good-name">
+                            360行车记录仪 G300 迷你隐藏 高清夜视 无限车速 黑灰色
                         </div>
-                        <div class="good-price">
-                            <div class="dollar">￥</div>
-                            <div class="price">222.1</div>
+                        <div class="good-type">
+                            深空灰
+                        </div>
+                        <div class="good-number-price">
+                            <div class="good-number">
+                                x1
+                            </div>
+                            <div class="good-price">
+                                <div class="dollar">￥</div>
+                                <div class="price">222.1</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="footer">
-            <div class="button">
-                立即付款
+            <div class="footer">
+                <div class="button">
+                    立即付款
+                </div>
             </div>
         </div>
-    </div>
+    </router-link>
 </template>
 
 <script>
 export default {
-    components:{
+    props:{
+        "oid":String
     },
-    data(){
-        return{
-            
-        }
-    }
 }
 </script>
 

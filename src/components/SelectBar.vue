@@ -19,10 +19,6 @@ export default {
         return{
             arrow
         }
-    },
-    mounted(){
-        console.log(this.name)
-        console.log(this.value)
     }
 }
 </script>

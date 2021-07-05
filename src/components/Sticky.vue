@@ -1,12 +1,16 @@
 <template>
     <div class="sticky-wrapper">
         <div class="shop">
-            <img :src="shop" alt="">
-            <span>商城</span>
+            <router-link to="/">
+                <img :src="shop" alt="">
+                <span>商城</span>
+            </router-link>
         </div>
         <div class="user">
-            <img :src="user" alt="">
-            <span>我的</span>
+            <router-link to="/user">
+                <img :src="user" alt="">
+                <span>我的</span>
+            </router-link>
         </div>
     </div>
 </template>

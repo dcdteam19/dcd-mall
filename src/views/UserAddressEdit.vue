@@ -88,10 +88,10 @@ export default{
     .footer{
         position: absolute;
         bottom: 0;
-        left:50%;
-        transform: translateX(-50%);
         height:90px;
+        width:100vw;
         background: #FFF;
+        text-align: center;
         .my-button{
             color:black;
             font-weight: 900;

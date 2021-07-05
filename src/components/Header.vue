@@ -1,6 +1,6 @@
 <template>
     <div id="header">
-        <v-return class="return" @click="rtrn"></v-return>
+        <v-return class="return"></v-return>
         {{title}}
     </div>
 </template>
@@ -13,12 +13,7 @@ export default{
     },
     props:[
         "title"
-    ],
-    methods:{
-        rtrn(){
-            console.log("return")
-        }
-    }
+    ]
 }
 </script>
 <style scoped>

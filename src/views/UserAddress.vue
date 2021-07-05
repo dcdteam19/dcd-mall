@@ -20,9 +20,12 @@
                     </div>
                 </div>
             </div>
-            <div class="iconfont">
-                &#xe607;
-            </div>
+            <router-link to="/user/address/edit">
+                <div class="iconfont">
+                    &#xe607;
+                </div>
+            </router-link>
+            
         </div>
     </div>
     <van-sticky :offset-bottom="0" position="bottom">

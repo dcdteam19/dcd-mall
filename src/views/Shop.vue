@@ -8,13 +8,17 @@
         </div>
         <div class="category-wrapper">
             <div class="category" v-for="i in category1" :key="i">
-                <van-image
-                round
-                width="44px"
-                height="44px"
-                :src="i.category_1_image"
-                />
-                <div class="category-name">{{i.category_1_name}}</div>
+                <div>
+                    <router-link :to="'/category?c1id='+i.category_1_id">
+                        <van-image
+                        round
+                        width="44px"
+                        height="44px"
+                        :src="i.category_1_image"
+                        />
+                        <div class="category-name">{{i.category_1_name}}</div>
+                    </router-link>
+                </div>
             </div>
         </div>
         <v-devide/>
@@ -35,21 +39,23 @@
             </div>
             <div class="good-wrapper">
                 <div class="good" v-for="i in discount.good" :key="i">
-                    <div class="price-wrapper">
-                        <div class="good-price">
-                            <span class="dollar">￥</span>
-                            <span class="price">{{i.good_price}}</span>
+                    <router-link :to="'/good?good_id=60e05bdcb1e31102251109b9&user_id=60df2674b1e311022511092e'">
+                        <div class="price-wrapper">
+                            <div class="good-price">
+                                <span class="dollar">￥</span>
+                                <span class="price">{{i.good_price}}</span>
+                            </div>
+                            <div class="good-origin-price">
+                                <span class="dollar">￥</span>
+                                <span class="price">{{i.good_origin_price}}</span>
+                            </div>
                         </div>
-                        <div class="good-origin-price">
-                            <span class="dollar">￥</span>
-                            <span class="price">{{i.good_origin_price}}</span>
-                        </div>
-                    </div>
-                    <van-image
-                    width="82px"
-                    height="82px"
-                    :src="i.good_image"
-                    />
+                        <van-image
+                        width="82px"
+                        height="82px"
+                        :src="i.good_image"
+                        />
+                    </router-link>
                 </div>
             </div>
         </div>
@@ -117,7 +123,6 @@ export default {
       )
       getShopDiscount().then(
           value=>{
-              console.log(value)
               this.discount.time=value.time;
               this.discount.good=value.good;
           },
