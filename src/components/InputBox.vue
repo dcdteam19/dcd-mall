@@ -2,7 +2,7 @@
     <div class="wrapper">
         <div class="name">{{name}}</div>
         <div class="value-wrapper">
-            <input type="text" class="value" v-model="value" :placeholder="placeholder">
+            <input type="text" class="value" v-model="value" :placeholder="placeholder" @blur="changeValue">
             <div class="iconfont" v-show="value.length!==0" @click="value=''">
                 &#xe633;
             </div>
@@ -13,6 +13,17 @@
 
 <script>
 export default {
+    // watch:{
+    //     value(newValue,oldValue){
+    //         console.log(newValue)
+    //     }
+    // },
+    methods:{
+        changeValue(){
+            // console.log(this.value)
+            this.$emit('newValue',this.value)
+        }
+    },
     props:{
         "name":String,
         "value":String,

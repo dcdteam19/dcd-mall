@@ -52,7 +52,7 @@
         <v-devide/>
         <div class="type-address-wrapper">
             <v-select-bar :name="'已选'" :value="order.type.description+'*'+order.number" @click="buy=true"></v-select-bar>
-            <v-select-bar :name="'送至'" :value="''" @click="address=true"></v-select-bar>
+            <v-select-bar :name="'送至'" :value="address_data[address_index].address_name" @click="address=true"></v-select-bar>
         </div>
         <v-devide/>
         <div class="info-service-bar">
@@ -133,18 +133,23 @@
                 <v-cross class="cross" @click="address=false"></v-cross>
             </div>
             <div class="body">
-                <div class="address-wrapper">
-                    <div class="address-row" v-for="i of [1,2,3,4,5,6,7,8]" :key="i" :class="{selected:true}">
+                <div class="address-wrapper" >
+                    <div class="address-row" 
+                    v-show="address_data[0].address_id!=''"
+                    v-for="(address,index) of address_data" 
+                    :key="address.address_id" 
+                    :class="{selected:index==address_index}"
+                    @click="address_index=index">
                         <div class="iconfont">&#xe632;</div>
                         <div class="address">
-                            北京市海淀区花园东路19号中兴大厦7层东侧501室
+                            {{address.address_name}}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="footer">
                 <div class="button" >
-                    <van-button type="primary" class="pop-button">添加新地址</van-button>
+                    <van-button type="primary" class="pop-button" @click="$router.push({path:'/user/address/edit',query:{user_id:$route.query.user_id}})">添加新地址</van-button>
                 </div>
             </div>
         </div>
@@ -164,7 +169,7 @@ import vDevide from '../components/Devide.vue'
 import vTag from '../components/Tag.vue'
 import vSelectBar from '../components/SelectBar.vue'
 import vCross from '../components/Cross.vue'
-import {goodInfoGet} from '../api'
+import {goodInfoGet,userCollectionSet,userAddressGet,orderInfoSet} from '../api'
 
 export default{
     name:'Good',
@@ -172,9 +177,34 @@ export default{
         changeCollect(){
             this.good_data.if_collect=!this.good_data.if_collect;
             console.log(this.good_data.if_collect)
+            userCollectionSet(this.$route.query.good_id,this.$route.query.user_id).then(
+                res=>{
+                    // console.log(res)
+                }
+            )
         },
         goOrder(){
-            this.$router.push({path:'/user/order/info'})
+            if(this.address_data[this.address_index].address_id==''){
+                this.address=true;
+            }
+            else{
+                orderInfoSet(
+                    this.$route.query.user_id,
+                    this.address_data[this.address_index].address_id,
+                    this.$route.query.good_id,
+                    // this.order.type.type_id,
+                    '60e05c6cb1e31102251109c4',
+                    this.order.number
+                ).then(
+                    res=>{
+                        console.log(res)
+                        if(res)
+                        this.$router.push({path:'/user/order/info',query:{order_id:res.data.order_id}})
+                    }
+                )
+
+            }
+            
         }
     },
     components:{
@@ -187,17 +217,15 @@ export default{
     data(){
         const router='';
         const title="商品详情"
-        const banner=[
-            'https://img.yzcdn.cn/vant/apple-1.jpg',
-            'https://img.yzcdn.cn/vant/apple-2.jpg'
-        ];
+
         const collection=[];
         collection.push(require('../assets/image/star-not.png'));
         collection.push(require('../assets/image/star-col.png'));
+
         let info_service=true;
+
         let address=false;
         let buy=false;
-        let name="black";
 
         const good_data={
             good_name:'',
@@ -221,31 +249,49 @@ export default{
             type:{
                 description:'',
                 type_price:0,
-                type_origin_price:0
+                type_origin_price:0,
+                type_id:0
             },
             number:1
         }
+
+        const address_data=[
+            {
+                address_id:'',
+                address_name:'',
+                receiver_name:'',
+                receiver_phone:''
+            }
+        ]
+        let address_index=0;
         
         return {
             title,
-            banner,
             collection,
             info_service,
             address,
             buy,
-            name,
 
             good_data,
-            order
+            order,
+            address_data,
+            address_index
         }
     },
-    mounted(){
+    created(){
         // console.log(this.$route.query)
         goodInfoGet(this.$route.query.good_id,this.$route.query.user_id).then(
             res=>{
+                // console.log(res)
                 this.good_data=res
                 this.order.type.description=this.good_data.type[0].description
                 console.log(this.good_data)
+            }
+        )
+        userAddressGet(this.$route.query.user_id).then(
+            res=>{
+                if(res.result.length!=0)
+                    this.address_data=res.result;
             }
         )
     }

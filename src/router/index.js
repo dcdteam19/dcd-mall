@@ -51,7 +51,7 @@ const routes = [
     name:'user',
     meta:{
       keepAlive:true,
-      isAuthRequired:true      
+      // isAuthRequired:true      
     },
     component:user
   },
@@ -60,7 +60,7 @@ const routes = [
     name:'userorder',
     meta:{
       keepAlive:true,
-      isAuthRequired:true  
+      // isAuthRequired:true  
     },
     component:userorder
   },
@@ -69,7 +69,7 @@ const routes = [
     name:'userorderinfo',
     meta:{
       keepAlive:true,
-      isAuthRequired:true  
+      // isAuthRequired:true  
     },
     component:userorderinfo
   },
@@ -78,7 +78,7 @@ const routes = [
     name:'useraddress',
     meta:{
       keepAlive:true,
-      isAuthRequired:true  
+      // isAuthRequired:true  
     },
     component:useraddress
   },
@@ -87,7 +87,7 @@ const routes = [
     name:'useraddressedit',
     meta:{
       keepAlive:false,
-      isAuthRequired:true 
+      // isAuthRequired:true 
     },
     component:useraddressedit
   }

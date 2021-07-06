@@ -1,9 +1,9 @@
 <template>
-    <router-link to="/user/order/info">
+    <router-link :to="'/user/order/info?order_id='+order.order_id+'&user_id='+userId">
         <div class="wrapper">
             <div class="header">
                 <div class="shop-name">车品商城</div>
-                <div class="state">待付款</div>
+                <div class="state">{{state}}</div>
             </div>
             <div class="body">
                 <div class="order-image">
@@ -11,24 +11,24 @@
                     width="95px"
                     height="95px"
                     fit="fill"
-                    src=""
+                    :src="order.type_image"
                     />
                 </div>
                 <div class="order-info-wrapper">
                     <div class="order-info">
                         <div class="good-name">
-                            360行车记录仪 G300 迷你隐藏 高清夜视 无限车速 黑灰色
+                            {{order.good_name}}
                         </div>
                         <div class="good-type">
-                            深空灰
+                            {{order.type_des}}
                         </div>
                         <div class="good-number-price">
                             <div class="good-number">
-                                x1
+                                x{{order.number}}
                             </div>
                             <div class="good-price">
                                 <div class="dollar">￥</div>
-                                <div class="price">222.1</div>
+                                <div class="price">{{order.order_price}}</div>
                             </div>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
             </div>
             <div class="footer">
                 <div class="button">
-                    立即付款
+                    {{operation}}
                 </div>
             </div>
         </div>
@@ -46,8 +46,36 @@
 <script>
 export default {
     props:{
-        "oid":String
+        "order":Object,
+        "userId":String
     },
+    data(){
+        let state='';
+        let operation='';
+        return{
+            state
+        }
+    },
+    created(){
+        switch(this.order.order_state){
+            case 0:
+                this.state='待付款';
+                this.operation='立即付款'
+                break;
+            case 1:
+                this.state='待发货'
+                this.operation='提醒发货'
+                break;
+            case 2:
+                this.state='待收货'
+                this.operation='确认收货'
+                break;
+            case 3:
+                this.state='已完成'
+                this.operation='已完成'
+                break;
+        }
+    }
 }
 </script>
 
@@ -87,7 +115,7 @@ export default {
             .order-image{
                 width:95px;
                 position: absolute;
-                height:100%;
+                height:95px;
             }
             .order-info-wrapper{
                 width:100%;

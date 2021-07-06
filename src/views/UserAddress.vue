@@ -2,50 +2,86 @@
     <div class="header">
         <v-header :title="title"></v-header>
     </div>
-    <div class="body">
-        <div class="address-wrapper" v-for="i in [1,1,1,1,1,1,1,1,1,1,1]" :key="i">
+    <div class="body" v-if="address_data.length!=0">
+        <div class="address-wrapper" v-for="address in address_data" :key="address.address_id" >
             <div class="iconfont">
                 &#xe632;
             </div>
             <div class="address-info">
                 <div class="address">
-                    北京市海淀区花园东路19号中兴大厦7层东侧501室
+                    {{address.address_name}}
                 </div>
                 <div class="user-phone">
                     <div class="user">
-                        懂车帝
+                        {{address.receiver_name}}
                     </div>
                     <div class="phone">
-                        18888888888
+                        {{address.receiver_phone}}
                     </div>
                 </div>
             </div>
-            <router-link to="/user/address/edit">
-                <div class="iconfont">
-                    &#xe607;
-                </div>
-            </router-link>
+            <div class="iconfont" @click="updateAddress(address)">
+                &#xe607;
+            </div>
+
             
         </div>
     </div>
     <van-sticky :offset-bottom="0" position="bottom">
         <div class="footer">
-            <van-button type="primary" class="my-button" @click="confirm">添加新地址</van-button>
+            <van-button type="primary" class="my-button" @click="addNewAddress">添加新地址</van-button>
         </div>
     </van-sticky>
 </template>
 <script>
 import vHeader from '../components/Header.vue'
+import {userAddressGet} from '../api/index'
+
 export default{
     name:'UserAddress',
     components:{
         vHeader
     },
+    methods:{
+        addNewAddress(){
+            this.$router.push({path:'/user/address/edit',query:{user_id:this.$route.query.user_id}})
+        },
+        updateAddress(address){
+            this.$router.push({path:'/user/address/edit',query:{
+                address_id:address.address_id,
+                address_name:address.address_name,
+                receiver_name:address.receiver_name,
+                receiver_phone:address.receiver_phone
+                }})
+        }
+    },
     data(){
         const title="我的地址"
+
+        const address_data=[
+            {
+                address_id:'',
+                address_name:'',
+                receiver_name:'',
+                receiver_phone:''
+            }
+        ]
         return{
-            title
+            title,
+
+            address_data
         }
+    },
+    mounted(){
+        userAddressGet(this.$route.query.user_id).then(
+            res=>{
+                this.address_data=res.data.result;
+                // console.log(res)
+            },
+            err=>{
+                console.log(err)
+            }
+        )
     }
 }
 </script>

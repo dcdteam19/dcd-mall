@@ -30,8 +30,10 @@ axios.interceptors.request.use(
 
         return config
 });
+
 axios.interceptors.response.use(
     res=>{
+        // console.log(res)
         return res
     },
     err=>{
@@ -52,7 +54,8 @@ function Get(url, params){
         .then(res => {            
             resolve(res.data);        
         })        
-        .catch(err => {            
+        .catch(err => {    
+            console.log('出现错误')              
             reject(err.data)        
         })    
     });
@@ -64,20 +67,81 @@ function Post(url, params) {
         .then(res => {            
             resolve(res.data);        
         })        
-        .catch(err => {            
+        .catch(err => {     
+            console.log('出现错误')       
             reject(err.data)        
         })    
     });
 }
 
-//关于用户接口
-export function userInfoGet(){
-    return Get('/userInfoGet',{})
+//关于用户信息的接口
+export function userInfoGet(user_id){
+    return Get('/userInfoGet',{
+        user_id:user_id
+    })
 }
+export function userImageSet(user_id,image_source){
+    return Post('userImageSet',{
+        user_id:user_id,
+        image_source:image_source
+    })
+}
+//关于用户地址的接口
+export function userAddressGet(user_id){
+    return Get('/userAddressGet',{
+        user_id:user_id
+    })
+}
+export function userAddressAdd(user_id,address_name,receiver_name,receiver_phone){
+    return Post('/userAddressAdd',{
+        user_id:user_id,
+        address_name:address_name,
+        receiver_name:receiver_name,
+        receiver_phone:receiver_phone
+    })
+}
+export function userAddressUpdate(address_id,address_name,receiver_name,receiver_phone){
+    return Post('/userAddressUpdate',{
+        address_id:address_id,
+        address_name:address_name,
+        receiver_name:receiver_name,
+        receiver_phone:receiver_phone
+    })
+}
+//关于用户订单的接口
+export function userOrderGet(user_id){
+    return Get('/userOrderGet',{
+        user_id:user_id
+    })
+}
+//生成新订单
+export function orderInfoSet(user_id,address_id,good_id,type_id,good_number){
+    return Post('/orderInfoSet',{
+        user_id,
+        address_id,
+        good_id,
+        type_id,
+        good_number
+    })
+}
+//某订单的信息接口
+export function orderInfoGet(order_id){
+    return Get('/orderInfoGet',{
+        order_id
+    })
+}
+//修改订单状态
+export function orderStatesUpdate(order_id,order_state){
+    return Post('orderStatesUpdate',{
+        order_id,
+        order_state //1：修改为待发货 2：修改为待收货 3：修改为已完成
+    })
+}
+
 
 //首页接口
 export function getCategory1(){
-    return Get('/category1/get',{})
+    return Get('/category1Get',{})
 }
 export function getShopGood(){
     return Get('/shop/good',{})
@@ -98,6 +162,15 @@ export function getCategory2(){
 export function goodInfoGet(good_id,user_id){
     return Get(
         '/goodInfoGet',
+        {
+            good_id:good_id,
+            user_id:user_id
+        }
+    )
+}
+export function userCollectionSet(good_id,user_id){
+    return Get(
+        '/userCollectionSet',
         {
             good_id:good_id,
             user_id:user_id

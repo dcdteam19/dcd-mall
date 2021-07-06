@@ -12,14 +12,14 @@
             <div class="user-phone-address">
                 <div class="user-phone">
                     <div class="user">
-                        收货人姓名
+                        {{order_data.address.receiver_name}}
                     </div>
                     <div class="phone">
-                        18818881888
+                        {{order_data.address.receiver_phone}}
                     </div>
                 </div>
                 <div class="address">
-                    重庆市江北区江北嘴IFS国金大厦T1-31层
+                    {{order_data.address.address_name}}
                 </div>
             </div>
             <div class="iconfont">
@@ -37,26 +37,26 @@
                         width="95px"
                         height="95px"
                         fit="fill"
-                        src=""
+                        :src="order_data.order.type_image"
                         />
                     </div>
                     <div class="good-info">
                         <div class="good-name">
-                            360行车记录仪 G300 迷你隐藏 高清夜视 无限车速 黑灰色
+                            {{order_data.order.good_name}}
                         </div>
                         <div class="good-type">
-                            深空灰
+                            {{order_data.order.type_des}}
                         </div>
                         <div class="good-number-price">
                             <div class="good-number">
-                                x2
+                                x{{order_data.order.number}}
                             </div>
                             <div class="good-price">
                                 <span class="dollar">
                                     ￥
                                 </span>
                                 <span class="price">
-                                    222.1
+                                    {{order_data.order.type_price}}
                                 </span>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                                 货品总价：
                             </span>
                             <span>
-                                ￥444.2
+                                ￥{{order_data.order.type_price*order_data.order.number}}
                             </span>
                         </div>
                         <div class="price">
@@ -77,14 +77,14 @@
                                 物流费用：
                             </span>
                             <span>
-                                ￥100.0
+                                ￥{{order_data.order.delivery_price}}
                             </span>
                         </div>
                     </div>
                     <div class="good-total-price">
                         <span class="total-price">总额: </span>
                         <span class="dollar"> ￥ </span>
-                        <span class="price">222.1</span>
+                        <span class="price">{{order_data.order.order_price+order_data.order.delivery_price}}</span>
                     </div>
                 </div>
             </div>
@@ -99,7 +99,7 @@
                         订单编号
                     </span>
                     <span class="right">
-                        BX202010154812
+                        {{order_data.order.order_id}}
                     </span>
                 </div>
                 <div class="order-time">
@@ -107,28 +107,149 @@
                         下单时间
                     </span>
                     <span class="right">
-                        2020-08-18  16:18:18
+                        {{order_data.order.order_createTime}}
                     </span>
                 </div>
             </div>
         </div>
+        <div class="tag">
+            <v-tag :name="'确认收货'" :isSelected="'确认收货'" 
+            @click="confirmOrder"
+            v-show="order_data.order.order_state==2">
+            </v-tag>
+            <v-tag :name="'提醒发货'" :isSelected="'提醒发货'" 
+            @click="remindOrder"
+            v-show="order_data.order.order_state==1">
+            </v-tag>
+        </div>
         <div class="button">
-            <van-button type="primary" class="my-button" @click="confirm">确认</van-button>
+            <van-button type="primary" class="my-button" @click="payOrder" v-show="order_data.order.order_state==0">确认</van-button>
         </div>
     </div>
 </template>
 
 <script>
 import vHeader from '../components/Header'
+import vTag from '../components/Tag.vue'
+import {orderInfoGet,orderStatesUpdate} from '../api/index'
+import {Toast,Dialog} from 'vant'
+
 export default{
+    watch:{
+        'order_data.order.order_state':{
+            handler(newValue,oldValue){
+                console.log(newValue)
+            },
+            deep:true
+        },
+        
+    },
     name:'Order',
     components:{
-        vHeader
+        vHeader,
+        vTag
     },
     data(){
         let title="待收货"
+
+        const order_data={
+            address:{
+                address_name:'',
+                receiver_name:'',
+                receiver_phone:''
+            },
+            order:{
+                good_name:'',
+                good_id:'',
+                order_state:'',
+                type_description:'',
+                type_image:'',
+                number:0,
+                order_price:0,
+                good_price:0,
+                delivery_price:0,
+                order_id:'',
+                order_time:'',
+            }
+        }
         return {
-            title
+            title,
+
+            order_data
+        }
+    },
+    activated(){
+        orderInfoGet(this.$route.query.order_id).then(
+            res=>{
+                console.log(res)
+                this.order_data=res.data
+                switch(this.order_data.order.order_state){
+                    case 0:
+                        this.title='待付款'
+                        break;
+                    case 1:
+                        this.title='待发货'
+                        break;
+                    case 2:
+                        this.title='待收货'
+                        break;
+                    case 3:
+                        this.title='已完成'
+                        break;
+                }
+            }
+        )
+    },
+    methods:{
+        payOrder(){
+            orderStatesUpdate(this.$route.query.order_id,1).then(
+                res=>{
+                    console.log(res)
+                    Toast.success('支付成功')
+                    this.$router.go(0)
+                },
+                err=>{
+                    Toast.fail('支付失败')
+                }
+            )
+        },
+        confirmOrder(){
+            Dialog.confirm({
+                title: '确认收货',
+                message: '请问您是否已收到货物？',
+                confirmButtonColor:'#FFCC32'
+            })
+            .then(() => {
+                // on confirm
+                orderStatesUpdate(this.$route.query.order_id,3).then(
+                    res=>{
+                        // console.log(res)
+                        Toast.success('收货成功')
+                        this.$router.go(0)
+                    },
+                    err=>{
+                        Toast.fail('收货失败')
+                    }
+                )
+            })
+            .catch(() => {
+                // on cancel
+                Toast.fail('取消收货')
+            });
+            
+        },
+        remindOrder(){
+            Toast.success('提醒成功')
+            // orderStatesUpdate(this.$route.query.order_id,2).then(
+            //     res=>{
+            //         console.log(res)
+            //         Toast.success('提醒成功')
+            //         this.$router.go(0)
+            //     },
+            //     err=>{
+            //         Toast.fail('提醒失败')
+            //     }
+            // )
         }
     }
 }
@@ -338,6 +459,10 @@ export default{
                     }
                 }
             }
+        }
+        .tag{
+            text-align: right;
+            margin-right:2.5%;
         }
         .button{
             margin-top:19.5px;

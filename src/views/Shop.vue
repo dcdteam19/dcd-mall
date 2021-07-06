@@ -9,7 +9,7 @@
         <div class="category-wrapper">
             <div class="category" v-for="i in category1" :key="i">
                 <div>
-                    <router-link :to="'/category?c1id='+i.category_1_id">
+                    <router-link :to="'/category?category_1_id='+i._id">
                         <van-image
                         round
                         width="44px"
@@ -112,10 +112,11 @@ export default {
           discount
       }
   },
-  mounted(){
+  created(){
       getCategory1().then(
             value=>{
-                this.category1=value.category
+                this.category1=value.data.category_1
+                // console.log(value)
             },
             reason=>{
                 console.log(reason)

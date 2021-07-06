@@ -1,4 +1,11 @@
 <template>
+    <van-popup v-model:show="popup" 
+    round
+    :style="{ height: '200px', width:'200px', textAlign:'center' }">
+        <div style="height:60px"></div>
+        <van-uploader :after-read="afterRead" />
+    </van-popup>
+
     <div class="header">
         <v-header :title="title"></v-header>
     </div>
@@ -9,28 +16,29 @@
             width="60px"
             height="60px"
             fit="fill"
-            src=""
+            :src="user_data.user_image"
             class="user-image"
+            @click="changeUserImage"
             />
             <div class="user-name-signature">
                 <div class="user-name">
-                    懂车小王子
+                    {{user_data.user_nickname}}
                 </div>
                 <div class="user-signature">
-                    专注于性能、操控、改装、乐趣的汽车视频
+                    {{user_data.user_signature}}
                 </div>
             </div>
         </div>
         <v-devide></v-devide>
         <div class="user-address-order-wrapper">
-            <router-link to="/user/address">
+            <router-link :to="'/user/address?user_id='+$route.query.user_id">
                 <div class="address-wrapper">
                     <img :src="address" alt="" class="icon">
                     <span>我的地址</span>
                     <img :src="arrow" alt=">" class="arrow">
                 </div>
             </router-link>
-            <router-link to="/user/order">
+            <router-link :to="'/user/order?user_id='+$route.query.user_id">
                 <div class="order-wrapper">
                     <img :src="order" alt="" class="icon">
                     <span>我的订单</span>
@@ -53,6 +61,8 @@
 import vHeader from '../components/Header.vue'
 import vDevide from '../components/Devide.vue'
 import vSticky from '../components/Sticky.vue'
+import {userInfoGet,userImageSet} from '../api/index'
+
 export default{
     name:'User',
     components:{
@@ -65,15 +75,53 @@ export default{
         const arrow=require('../assets/image/more_ic@2x.png');
         const address=require('../assets/image/address.png');
         const order=require('../assets/image/order.png')
+        let popup=false;
+
+        const user_data={
+            user_nickname:'',
+            user_signature:'',
+            user_image:''
+        }
         return {
             title,
             arrow,
             address,
-            order
+            order,
+            popup,
+
+            user_data
         }
     },
-    mounted(){
-        console.log(this.$route.params.uid)
+    methods:{
+        changeUserImage(){
+            this.popup=true;
+        },
+        //上传头像
+        afterRead(file){
+            // console.log(file.content)
+            userImageSet(this.$route.query.user_id,file.content).then(
+                res=>{
+                    // console.log(res)
+                    this.popup=false;
+                    this.user_data.user_image=res.user_image
+                },
+                err=>{
+                    console.log(err)
+                }
+            )
+        }
+    },
+    created(){
+        // console.log(this.$route.query.user_id)
+        userInfoGet(this.$route.query.user_id).then(
+            res=>{
+                this.user_data=res;
+                // console.log(res)
+            },
+            err=>{
+                console.log(err)
+            }
+        )
     }
 }
 </script>

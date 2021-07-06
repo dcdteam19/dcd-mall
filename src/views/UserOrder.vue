@@ -19,13 +19,22 @@
                     待收货
                     <div class="line" v-show="state==='待收货'"></div>
                 </div>
+                <div :class="{selected:state==='已完成'}" @click="state='已完成'">
+                    已完成
+                    <div class="line" v-show="state==='已完成'"></div>
+                </div>
             </div>
         </div>
     </van-sticky>
     
     <div class="body">
         <div class="page-wrapper">
-            <v-order-box v-for="i in [1,1]" :key="i"></v-order-box>
+            <v-order-box 
+            v-for="order in curr_order_data" 
+            :key="order.order_id" 
+            :order="order" 
+            :userId="$route.query.user_id">
+            </v-order-box>
         </div>
     </div>
     <div class="footer">
@@ -35,7 +44,50 @@
 <script>
 import vHeader from '../components/Header.vue'
 import vOrderBox from '../components/OrderBox.vue'
+import {userOrderGet} from '../api/index'
+
 export default{
+    watch:{
+        state(newValue){
+            switch(newValue){
+                case '全部':
+                    this.curr_order_data=this.order_data;
+                    break;
+                case '待付款':
+                    this.curr_order_data=[];
+                    for(let order of this.order_data){
+                        if(order.order_state==0){
+                            this.curr_order_data.push(order)
+                        }
+                    }
+                    break;
+                case '待发货':
+                    this.curr_order_data=[];
+                    for(let order of this.order_data){
+                        if(order.order_state==1){
+                            this.curr_order_data.push(order)
+                        }
+                    }
+                    break;
+                case '待收货':
+                    this.curr_order_data=[];
+                    for(let order of this.order_data){
+                        if(order.order_state==2){
+                            this.curr_order_data.push(order)
+                        }
+                    }
+                    break;
+                case '已完成':
+                    this.curr_order_data=[];
+                    for(let order of this.order_data){
+                        if(order.order_state==3){
+                            this.curr_order_data.push(order)
+                        }
+                    }
+                    break;
+            }
+        }
+    },
     name:'UserOrder',
     components:{
         vHeader,
@@ -44,10 +96,39 @@ export default{
     data(){
         const title="我的订单";
         let state="全部";
+
+        const order_data=[
+            {
+                order_id:'',
+                order_state:'',
+                order_price:0,
+                good_name:'',
+                type_des:'',
+                type_image:'',
+                number:'',
+            }
+        ]
+
+        const curr_order_data=[]
+
         return{
             title,
-            state
+            state,
+
+            order_data,
+            curr_order_data
         }
+    },
+    created(){
+        userOrderGet(this.$route.query.user_id).then(
+            res=>{
+                console.log(res)
+                // this.order_data=res.orders;
+                this.order_data=res.data.ordersResult
+                this.curr_order_data=res.data.ordersResult
+                // console.log(this.order_data)
+            }
+        )
     }
 }
 </script>
