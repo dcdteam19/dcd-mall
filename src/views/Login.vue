@@ -29,6 +29,9 @@
 <script>
 import vHeader from '../components/Header.vue'
 import vSticky from '../components/Sticky.vue'
+import {login} from '../api/index'
+import {Toast} from 'vant'
+import store from '../store'
 
 export default{
     name:'Login',
@@ -75,6 +78,10 @@ export default{
         vHeader,
         vSticky
     },
+    //假设进入页面就直接登出
+    created(){
+        localStorage.clear('token')
+    },
     methods:{
         clear(){
             this.show=!this.show;
@@ -88,7 +95,24 @@ export default{
                 this.passwordEmpty=true;
             }
             if(this.userinfo.username!='' && this.userinfo.password!=''){
-                console.log(this.userinfo)
+                // console.log(this.userinfo)
+                login(this.userinfo.username,this.userinfo.password).then(
+                    res=>{
+                        console.log(res)
+                        if(res.state_code==-2){
+                            Toast.fail('用户名已被注册，密码错误')
+                        }
+                        else{
+                            // window.localStorage.setItem('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjBkZDdiMDhjYzQ1YjcwMDE1ZWE3MzIyIiwiZXhwIjoxNjI1ODI1MzE3LCJpYXQiOjE2MjU2MjM3MTd9.PI86LOsGmH582Dd0cFomMo9AoRlIMUWFBImWO9QZT6g')
+                            window.localStorage.setItem('token',res.token)
+                            store.commit('setIsLogin',true)
+                            Toast.success('登录成功')
+                            setTimeout(()=>{
+                                this.$router.go(-1)
+                            },500)
+                        }
+                    }
+                )
             }
         }
     }

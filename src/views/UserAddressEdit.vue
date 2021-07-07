@@ -80,7 +80,8 @@ export default{
         onSave(){
             console.log(this.address_data)
             if(this.$route.query.address_id){
-                userAddressUpdate(this.$route.query.address_id,
+                userAddressUpdate(
+                this.$route.query.address_id,
                 this.address_data.address_name,
                 this.address_data.receiver_name,
                 this.address_data.receiver_phone).then(
@@ -94,7 +95,7 @@ export default{
                 )
             }
             else{
-                userAddressAdd(this.$route.query.user_id,
+                userAddressAdd(
                 this.address_data.address_name,
                 this.address_data.receiver_name,
                 this.address_data.receiver_phone).then(
@@ -121,13 +122,12 @@ export default{
     },
     mounted(){
         if(this.$route.query.address_id){
-            // console.log(this.$route.query.address_id)
-            // console.log(this.$route.query.address_name)
-            // console.log(this.$route.query.receiver_name)
-            // console.log(this.$route.query.receiver_phone)
-            this.address_data.address_name=this.$route.query.address_name;
-            this.address_data.receiver_name=this.$route.query.receiver_name;
-            this.address_data.receiver_phone=this.$route.query.receiver_phone;
+            if(this.$route.query.address_name) 
+                this.address_data.address_name=this.$route.query.address_name;
+            if(this.$route.query.receiver_name) 
+                this.address_data.receiver_name=this.$route.query.receiver_name;
+            if(this.$route.query.receiver_phone) 
+                this.address_data.receiver_phone=this.$route.query.receiver_phone;
         }
     }
 }

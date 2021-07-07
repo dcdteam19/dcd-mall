@@ -3,20 +3,22 @@
 </template>
 
 <script>
-import {useRouter} from 'vue-router'
+import store from '../store'
+
 export default {
     name:"return",
     data(){
         let arr=require("../assets/image/icon_ Return.png")
-        const router=useRouter();
         return{
-            arr,
-            router
+            arr
         }
     },
     methods:{
         goBack(){
-            this.router.go(-1)
+            if(store.state.user.isLogin)
+                this.$router.go(-1)
+            else
+                this.$router.push({path:'/'})
         }
     }
 }

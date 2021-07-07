@@ -31,14 +31,14 @@
         </div>
         <v-devide></v-devide>
         <div class="user-address-order-wrapper">
-            <router-link :to="'/user/address?user_id='+$route.query.user_id">
+            <router-link to="/user/address">
                 <div class="address-wrapper">
                     <img :src="address" alt="" class="icon">
                     <span>我的地址</span>
                     <img :src="arrow" alt=">" class="arrow">
                 </div>
             </router-link>
-            <router-link :to="'/user/order?user_id='+$route.query.user_id">
+            <router-link to="/user/order">
                 <div class="order-wrapper">
                     <img :src="order" alt="" class="icon">
                     <span>我的订单</span>
@@ -99,21 +99,20 @@ export default{
         //上传头像
         afterRead(file){
             // console.log(file.content)
-            userImageSet(this.$route.query.user_id,file.content).then(
+            userImageSet(file.content).then(
                 res=>{
                     // console.log(res)
                     this.popup=false;
                     this.user_data.user_image=res.user_image
                 },
                 err=>{
-                    console.log(err)
+                    console.log('上传失败',err)
                 }
             )
         }
     },
     created(){
-        // console.log(this.$route.query.user_id)
-        userInfoGet(this.$route.query.user_id).then(
+        userInfoGet().then(
             res=>{
                 this.user_data=res;
                 // console.log(res)

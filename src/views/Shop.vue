@@ -39,7 +39,7 @@
             </div>
             <div class="good-wrapper">
                 <div class="good" v-for="i in discount.good" :key="i">
-                    <router-link :to="'/good?good_id=60e05bdcb1e31102251109b9&user_id=60df2674b1e311022511092e'">
+                    <router-link :to="'/good?good_id=60e05bdcb1e31102251109b9'">
                         <div class="price-wrapper">
                             <div class="good-price">
                                 <span class="dollar">￥</span>

@@ -72,11 +72,12 @@ export default{
             address_data
         }
     },
-    mounted(){
-        userAddressGet(this.$route.query.user_id).then(
+    created(){
+        const token=window.localStorage.getItem('token')
+        userAddressGet(token).then(
             res=>{
                 this.address_data=res.data.result;
-                // console.log(res)
+                console.log(res)
             },
             err=>{
                 console.log(err)

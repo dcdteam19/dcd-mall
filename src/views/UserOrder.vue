@@ -120,7 +120,7 @@ export default{
         }
     },
     created(){
-        userOrderGet(this.$route.query.user_id).then(
+        userOrderGet().then(
             res=>{
                 console.log(res)
                 // this.order_data=res.orders;

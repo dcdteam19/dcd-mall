@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="'/user/order/info?order_id='+order.order_id+'&user_id='+userId">
+    <router-link :to="'/user/order/info?order_id='+order.order_id">
         <div class="wrapper">
             <div class="header">
                 <div class="shop-name">车品商城</div>

@@ -66,10 +66,10 @@
             </div>
         </div>
         <div class="good-info" v-show="info_service">
-            123
+            <div v-html="good_data.good_detail"></div>
         </div>
         <div class="good-service" v-show="!info_service">
-            321
+            {{good_data.sale_service}}
         </div>
     </div>
 
@@ -81,7 +81,7 @@
                     width="90px"
                     height="90px"
                     fit="contain"
-                    :src="good-image"
+                    :src="order.type.type_image"
                 />
                 <div class="good-price-wrapper">
                     <div class="good-price">
@@ -89,7 +89,7 @@
                             ￥
                         </span>
                         <span class="price">
-                            {{order.type.type_price}}
+                            {{order.type.price}}
                         </span>
                     </div>
                     <div class="good-origin-price">
@@ -97,7 +97,7 @@
                             ￥
                         </span>
                         <span class="price">
-                            {{order.type.type_origin_price}}
+                            {{order.type.origin_price}}
                         </span>
                     </div>
                 </div>
@@ -170,6 +170,7 @@ import vTag from '../components/Tag.vue'
 import vSelectBar from '../components/SelectBar.vue'
 import vCross from '../components/Cross.vue'
 import {goodInfoGet,userCollectionSet,userAddressGet,orderInfoSet} from '../api'
+import store from '../store'
 
 export default{
     name:'Good',
@@ -177,7 +178,7 @@ export default{
         changeCollect(){
             this.good_data.if_collect=!this.good_data.if_collect;
             console.log(this.good_data.if_collect)
-            userCollectionSet(this.$route.query.good_id,this.$route.query.user_id).then(
+            userCollectionSet(this.$route.query.good_id).then(
                 res=>{
                     // console.log(res)
                 }
@@ -189,17 +190,19 @@ export default{
             }
             else{
                 orderInfoSet(
-                    this.$route.query.user_id,
                     this.address_data[this.address_index].address_id,
                     this.$route.query.good_id,
-                    // this.order.type.type_id,
-                    '60e05c6cb1e31102251109c4',
+                    this.order.type.type_id,
                     this.order.number
                 ).then(
                     res=>{
                         console.log(res)
-                        if(res)
-                        this.$router.push({path:'/user/order/info',query:{order_id:res.data.order_id}})
+                        if(res.message){
+                            console.log(res.message)
+                        }
+                        else{
+                            this.$router.push({path:'/user/order/info',query:{order_id:res.data.order_id}})
+                        }
                     }
                 )
 
@@ -235,8 +238,10 @@ export default{
             good_price:'',
             good_origin_price:'',
             if_collect:false,
+
             type:[
                 {
+                    type_id:'',
                     type_description:'',
                     type_price:'',
                     type_origin_price:'',
@@ -280,20 +285,27 @@ export default{
     },
     created(){
         // console.log(this.$route.query)
-        goodInfoGet(this.$route.query.good_id,this.$route.query.user_id).then(
+        goodInfoGet(this.$route.query.good_id).then(
             res=>{
-                // console.log(res)
-                this.good_data=res
-                this.order.type.description=this.good_data.type[0].description
-                console.log(this.good_data)
+                console.log(res.data)
+                if(res.state_code==0)
+                {
+                    this.good_data=res.data
+                    this.order.type=this.good_data.type[0]
+                }
+                // console.log(this.good_data)
             }
         )
-        userAddressGet(this.$route.query.user_id).then(
-            res=>{
-                if(res.result.length!=0)
-                    this.address_data=res.result;
-            }
-        )
+        if(store.state.user.isLogin)
+        {
+            userAddressGet().then(
+                res=>{
+                    // console.log(res)
+                    if(res.data.result.length!=0)
+                        this.address_data=res.data.result;
+                }
+            )
+        }    
     }
 }
 </script>
@@ -409,6 +421,12 @@ export default{
                 color: #1A1A1A;
                 font-weight: 600;
             }
+        }
+        .good-info{
+            word-break: break-all;
+        }
+        .good-service{
+            word-break: break-all;
         }
     }
     .pop-wrapper{

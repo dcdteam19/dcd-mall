@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Toast } from 'vant';
 import router from '../router'
+import store from '../store';
 
 //开发本地代理
 if(process.env.NODE_ENV=='dev'){
@@ -23,25 +24,29 @@ axios.interceptors.request.use(
     config => {
         //如果有一个接口需要认证才可以访问，就在这统一设置
         const token=window.localStorage.getItem('token');
-
         if(token){
-            config.headers.Authorization='Bearer '+token;
+            config.headers.Authorization=token;
         }
-
-        return config
+    return config
 });
 
 axios.interceptors.response.use(
     res=>{
         // console.log(res)
-        return res
-    },
-    err=>{
-        if(err.response.status=='401'){
-            Toast.fail('请先登录')
-            router.push({path:'/login'})
+        if(res.data.state_code==-3){
+            Toast.fail('登录信息有误')
+            store.commit('setIsLogin',false)
+            router.push('/login')
+            // store.commit('setIsLogin',false)
         }
-        console.log(err.response.data.errors)
+        else if(res.data.state_code==0){
+            //token快过期了 更新token
+            if(res.data.token){
+                window.localStorage.setItem('token',res.data.token)
+            }
+            return res
+        }
+        return res
     }
 )
 
@@ -55,8 +60,8 @@ function Get(url, params){
             resolve(res.data);        
         })        
         .catch(err => {    
-            console.log('出现错误')              
-            reject(err.data)        
+            console.log('get出现错误')              
+            // reject(err.data)        
         })    
     });
 }
@@ -68,33 +73,35 @@ function Post(url, params) {
             resolve(res.data);        
         })        
         .catch(err => {     
-            console.log('出现错误')       
-            reject(err.data)        
+            console.log('post出现错误')       
+            reject(err.data) 
         })    
     });
 }
 
 //关于用户信息的接口
-export function userInfoGet(user_id){
-    return Get('/userInfoGet',{
-        user_id:user_id
-    })
+export function login(user_name,user_password){
+    return Post('/login',{
+            user_name,
+            user_password
+        }
+    )
 }
-export function userImageSet(user_id,image_source){
+export function userInfoGet(){
+    return Get('/userInfoGet',{})
+}
+export function userImageSet(image_source){
     return Post('userImageSet',{
-        user_id:user_id,
         image_source:image_source
     })
 }
+
 //关于用户地址的接口
-export function userAddressGet(user_id){
-    return Get('/userAddressGet',{
-        user_id:user_id
-    })
+export function userAddressGet(){
+    return Get('/userAddressGet',{})
 }
-export function userAddressAdd(user_id,address_name,receiver_name,receiver_phone){
+export function userAddressAdd(address_name,receiver_name,receiver_phone){
     return Post('/userAddressAdd',{
-        user_id:user_id,
         address_name:address_name,
         receiver_name:receiver_name,
         receiver_phone:receiver_phone
@@ -109,15 +116,13 @@ export function userAddressUpdate(address_id,address_name,receiver_name,receiver
     })
 }
 //关于用户订单的接口
-export function userOrderGet(user_id){
+export function userOrderGet(){
     return Get('/userOrderGet',{
-        user_id:user_id
     })
 }
 //生成新订单
-export function orderInfoSet(user_id,address_id,good_id,type_id,good_number){
+export function orderInfoSet(address_id,good_id,type_id,good_number){
     return Post('/orderInfoSet',{
-        user_id,
         address_id,
         good_id,
         type_id,
@@ -159,21 +164,19 @@ export function getCategory2(){
 }
 
 //商品详情页接口
-export function goodInfoGet(good_id,user_id){
+export function goodInfoGet(good_id){
     return Get(
         '/goodInfoGet',
         {
-            good_id:good_id,
-            user_id:user_id
+            good_id:good_id
         }
     )
 }
-export function userCollectionSet(good_id,user_id){
+export function userCollectionSet(good_id){
     return Get(
         '/userCollectionSet',
         {
-            good_id:good_id,
-            user_id:user_id
+            good_id:good_id
         }
     )
 }
