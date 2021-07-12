@@ -34,7 +34,7 @@ const routes = [
     path: '/category',
     name: 'category',
     meta:{
-      keepAlive:true
+      // keepAlive:true
     },
     component: category
   },

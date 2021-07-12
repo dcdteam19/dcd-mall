@@ -283,11 +283,13 @@ export default{
             address_index
         }
     },
-    created(){
+    activated(){
         // console.log(this.$route.query)
+        this.good_data=[]
+        this.order.type=[];
         goodInfoGet(this.$route.query.good_id).then(
             res=>{
-                console.log(res.data)
+                // console.log(res.data)
                 if(res.state_code==0)
                 {
                     this.good_data=res.data

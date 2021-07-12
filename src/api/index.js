@@ -31,22 +31,21 @@ axios.interceptors.request.use(
 });
 
 axios.interceptors.response.use(
-    res=>{
-        // console.log(res)
-        if(res.data.state_code==-3){
+    value=>{
+        if(value.data.state_code==-3){
             Toast.fail('登录信息有误')
             store.commit('setIsLogin',false)
             router.push('/login')
             // store.commit('setIsLogin',false)
         }
-        else if(res.data.state_code==0){
+        else if(value.data.state_code==0){
             //token快过期了 更新token
-            if(res.data.token){
-                window.localStorage.setItem('token',res.data.token)
+            if(value.data.token){
+                window.localStorage.setItem('token',value.data.token)
             }
-            return res
+            return value
         }
-        return res
+        return value
     }
 )
 
@@ -56,8 +55,8 @@ function Get(url, params){
         axios.get(url, {            
             params: params        
         })        
-        .then(res => {            
-            resolve(res.data);        
+        .then(value => {            
+            resolve(value.data);        
         })        
         .catch(err => {    
             console.log('get出现错误')              
@@ -69,8 +68,8 @@ function Get(url, params){
 function Post(url, params) {    
     return new Promise((resolve, reject) => {         
         axios.post(url, params)        
-        .then(res => {            
-            resolve(res.data);        
+        .then(value => {            
+            resolve(value.data);        
         })        
         .catch(err => {     
             console.log('post出现错误')       
@@ -149,18 +148,25 @@ export function getCategory1(){
     return Get('/category1Get',{})
 }
 export function getShopGood(){
-    return Get('/shop/good',{})
+    return Get('/homepageGoodGet',{})
 }
+//优惠商品
 export function getShopDiscount(){
-    return Get('/shop/discount',{})
+    return Get('/discountGoodGet',{})
 }
 
 //类目聚合页接口
-export function getCategory2Good(){
-    return Get('/category2/good',{})
+export function getCategory2Good(category_1_id,category_2_id,page){
+    return Get('/category2GoodGet',{
+        category_1_id,
+        category_2_id,
+        page
+    })
 }
-export function getCategory2(){
-    return Get('/category2',{})
+export function getCategory2(category1_id){
+    return Get('/category2Get',{
+        category1_id
+    })
 }
 
 //商品详情页接口

@@ -9,7 +9,7 @@
         <div class="category-wrapper">
             <div class="category" v-for="i in category1" :key="i">
                 <div>
-                    <router-link :to="'/category?category_1_id='+i._id">
+                    <router-link :to="'/category?category1_id='+i._id+'&category1_name='+i.category_1_name">
                         <van-image
                         round
                         width="44px"
@@ -39,15 +39,15 @@
             </div>
             <div class="good-wrapper">
                 <div class="good" v-for="i in discount.good" :key="i">
-                    <router-link :to="'/good?good_id=60e05bdcb1e31102251109b9'">
+                    <router-link :to="'/good?good_id='+i.good_id">
                         <div class="price-wrapper">
                             <div class="good-price">
                                 <span class="dollar">￥</span>
-                                <span class="price">{{i.good_price}}</span>
+                                <span class="price">{{i.price}}</span>
                             </div>
                             <div class="good-origin-price">
                                 <span class="dollar">￥</span>
-                                <span class="price">{{i.good_origin_price}}</span>
+                                <span class="price">{{i.origin_price}}</span>
                             </div>
                         </div>
                         <van-image
@@ -62,11 +62,12 @@
         <v-devide/>
         <div class="category-good-wrapper" v-for="i in good" :key="i">
             <div class="header">
-                <span>{{i.category_1_name}}</span>
+                <span>{{i.category1_name}}</span>
             </div>
             <div class="content">
                 <v-good :good="i.good"></v-good>
             </div>
+            <v-devide></v-devide>
         </div>
     </div>
     <van-sticky :offset-bottom="0" position="bottom">
@@ -84,7 +85,7 @@ import vReturn from '../components/Return.vue'
 import vDevide from '../components/Devide.vue'
 import vGood from '../components/Good.vue'
 import vSticky from '../components/Sticky.vue'
-import {getCategory1,getShopGood,getShopDiscount} from '../api/index'
+import {getCategory1,getShopGood} from '../api/index'
 
 export default {
   name: 'Shop',
@@ -105,7 +106,6 @@ export default {
           time:0,
           good:[]
       }
-      let time=0;
       return{
           category1,
           good,
@@ -122,30 +122,22 @@ export default {
                 console.log(reason)
             }
       )
-      getShopDiscount().then(
-          value=>{
-              this.discount.time=value.time;
-              this.discount.good=value.good;
-          },
-          reason=>{
-              console.log(reason)
-          }
-      )
       getShopGood().then(
           value=>{
-              this.good=value.data;
-            //   console.log(this.good)
+              this.good=value.data.homepage_good;
+              this.discount.good=value.data.discount_good;
+              this.discount.time=value.data.discount_time;
           },
           reason=>{
               console.log(reason)
           }
       )
-      
   }
 }
 </script>
 <style lang="scss" scoped>
     .main{
+        min-height:100vh;
         padding: 0;
         .return{
             position: absolute;
@@ -287,6 +279,7 @@ export default {
                 width: 100%;
                 display: flex;
                 justify-content: center;
+                margin-bottom:16px;
             }
         }
 

@@ -1,12 +1,13 @@
 <template>
     <div class="good-wrapper">
         <div class="good-box" v-for="i in good" :key="i">
-            <router-link :to="'/good?gid='+i.good_id">
+            <router-link :to="'/good?good_id='+i.good_id">
                 <div>
                     <van-image
                     width="169px"
                     height="169px"
                     fit="fill"
+                    lazy-load
                     :src="i.good_image"
                     />
                     <div class="good-name">
@@ -15,9 +16,9 @@
                     <div class="price-wrapper">
                         <div class="good-price">
                             <span class="dollar">￥</span>
-                            <span class="price">{{i.good_price}}</span>
+                            <span class="price">{{i.price}}</span>
                         </div>
-                        <div class="good-origin-price">￥{{i.good_origin_price}}</div> 
+                        <div class="good-origin-price">￥{{i.origin_price}}</div> 
                     </div>  
                 </div>
             </router-link>
@@ -38,11 +39,15 @@ export default {
     .good-wrapper{
         display: flex;
         flex-wrap:wrap;
-        justify-content:center;
+        justify-content:flex-start;
+        width: 95%;
+        margin-left:3%;
+        .good-box:nth-child(odd){
+            margin-right: 7px;
+        }
         .good-box{
             height: 253px;
             width: 169px;
-            margin-right: 7px;
             margin-bottom:7px; 
             background: #F6F6F6;
             border-radius: 4px 4px 4px 4px;

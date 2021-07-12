@@ -6,9 +6,10 @@
                 <div class="tags">
                     <div class="category-item" v-show="!show">
                         <span v-for="i in category2" :key="i" 
-                        :class="{selected:isSelected===i.category_2_id}"
-                        @click="changeCategory(i.category_2_id)">
-                        {{i.category_2_name}}
+                        :class="{selected:isSelected===i.category2_id}"
+                        :id="i.category2_id"
+                        @click="changeCategory(i.category2_id)">
+                        {{i.category2_name}}
                         </span>
                     </div>
                     <span class="category-all" v-show="show">
@@ -22,10 +23,10 @@
                 </div>
                 <div class="pop" v-show="show">
                     <v-tag
-                    v-for="i in category2" :key="i"
-                    @click="changeCategory(i.category_2_id)"
-                    :name="i.category_2_name"
-                    :id="i.category_2_id"
+                    v-for="i in category2" :key="i.category2_id"
+                    @click="changeCategory(i.category2_id)"
+                    :name="i.category2_name"
+                    :id="i.category2_id"
                     :isSelected="isSelected">
                     </v-tag>
                 </div>
@@ -37,7 +38,12 @@
         </van-overlay>
         <div class="good-wrapper">
             <div class="good">
-                <v-good :good="good" v-for="i in [1,1]" :key="i"></v-good>
+                <v-good :good="good"></v-good>
+            </div>
+            <div class="tip" v-show="showTip">
+                —— 更多好物敬请期待 ——
+                <br/>
+                懂车帝精选 价格优惠 品质保障
             </div>
         </div>
     </div>
@@ -64,13 +70,19 @@ export default{
         vTag
     },
     data(){
-        let title="车载电器";
+        let title="";
         let arrow_up=require('../assets/image/arrow_up@2x.png');
         let arrow_down=require('../assets/image/arrow_down@2x.png');
         let show =false;
-        const good=[];
-        const category2=[];
+        let good=[];
+        let category2=[];
         let isSelected='';
+        //无限请求商品
+        let showTip=true;
+        let io;
+        let target;
+        let goodBox;
+        let page=1;
         return {
             title,
             arrow_up,
@@ -78,32 +90,95 @@ export default{
             show,
             good,
             category2,
-            isSelected
+            isSelected,
+
+            showTip,
+            io,
+            target,
+            goodBox,
+            page
         }
     },
     methods:{
         showPopup(){
             this.show=!this.show;
         },
-        changeCategory(Category_2_id){
-            console.log(Category_2_id)
-            this.isSelected=Category_2_id
+        changeCategory(Category2_id){
+            this.isSelected=Category2_id
+            this.good=[];
+            this.page=1;
+            getCategory2Good(this.$route.query.category1_id,this.isSelected,this.page).then(
+                value=>{
+                    this.good=value.data.goods;
+                    if(this.good.length<=1){
+                        this.showTip=true;
+                    }
+                    else{
+                        this.setObserver()
+                    }
+                }
+            )
+        },
+        setObserver(){
+            setTimeout(()=>{
+                this.io=new IntersectionObserver(config=>this.getMoreGood(config));
+                this.goodBox=document.querySelector('.good').childNodes[0].childNodes;
+                this.target=this.goodBox[this.goodBox.length-2]
+                this.io.observe(this.target); 
+            })
+        },
+        getMoreGood(config){
+            if(config[0].intersectionRatio>0){
+                // console.log(config)
+                this.io.unobserve(this.target)
+                getCategory2Good(this.$route.query.category1_id,this.isSelected,this.page)
+                .then(
+                    res=>{
+                        if(res.data.goods.length<1){
+                            this.showTip=true;
+                        }
+                        else{
+                            this.page++;
+                            this.good=[...this.good,...res.data.goods]
+                            this.target=this.goodBox[this.goodBox.length-2];
+                            this.io.observe(this.target)
+                        }
+                    }
+                )
+            };
         }
     },
-    mounted(){
-        getCategory2Good().then(
+    created(){
+        this.title=this.$route.query.category1_name;
+        this.category2=[];
+        this.isSelected='';
+        this.good=[];
+        
+        getCategory2(this.$route.query.category1_id).then(
             value=>{
-                // console.log(value)
-                this.good=value.good;
+                this.category2=value.data.result;
+                if(this.category2.length) 
+                {
+                    this.isSelected=this.category2[0].category2_id;
+                    getCategory2Good(this.$route.query.category1_id,this.isSelected,this.page).then(
+                        value=>{
+                            // console.log(value)
+                            this.good=value.data.goods;
+                            //上拉加载更多商品
+                            if(this.good.length<=1){
+                                this.showTip=true;
+                            }
+                            else{
+                                this.page++;
+                                this.setObserver()
+                            }
+                        }
+                    )
+                }
+                
             }
         )
-        getCategory2().then(
-            value=>{
-                this.category2=value.category_2;
-                this.isSelected=this.category2[0].category_2_id;
-                // console.log(value)
-            }
-        )
+
     }
 }
 </script>
@@ -207,12 +282,19 @@ export default{
         }
     }
     .body{
-        min-height: 100vh;
+        min-height: 90vh;
         .good-wrapper{
             padding-top:44px;
             height: fit-content;
             .good{
-                margin-top:12px
+                margin-top:12px;
+                margin-left:4px;
+            }
+            .tip{
+                margin-top:24px;
+                text-align: center;
+                font-size: 14px;
+                color:#999;
             }
         }
     }

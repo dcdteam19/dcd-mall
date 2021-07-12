@@ -1,5 +1,5 @@
 <template>
-    <div class="tag" :class="{selected:name==isSelected}">
+    <div class="tag" :class="{selected:id==isSelected}">
         {{name}}
     </div>
 </template>
@@ -9,7 +9,8 @@ export default {
     name:"Tag",
     props:[
         "name",
-        "isSelected"
+        "isSelected",
+        "id"
     ]
 }
 </script>
